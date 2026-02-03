@@ -1,9 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { JwtGuard } from 'src/common/guards/jwt.guard';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { Role } from 'generated/prisma/enums';
 
 @Controller('tickets')
+@UseGuards(JwtGuard)
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
@@ -13,6 +18,8 @@ export class TicketsController {
   }
 
   @Get()
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   findAll() {
     return this.ticketsService.findAll();
   }
@@ -28,7 +35,9 @@ export class TicketsController {
   }
 
   @Delete(':id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   remove(@Param('id') id: string) {
-    return this.ticketsService.remove(+id);
+    return this.reservationsService.remove(+id);
   }
 }
