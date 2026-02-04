@@ -27,26 +27,26 @@ export class EvenementesController {
   @Patch(':id/status')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  changeStatus(@Param('id') id: Number, @Body() changeStatusDto:ChangeStatusDto) {
+  changeStatus(@Param('id') id: number, @Body() changeStatusDto:ChangeStatusDto) {
     return this.evenementesService.changeStatus(+id, changeStatusDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.evenementesService.findOne(+id);
   }
 
   @Put(':id')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  update(@Param('id') id: string, @Body() updateEvenementeDto: UpdateEvenementeDto) {
+  update(@Param('id') id: number, @Body() updateEvenementeDto: UpdateEvenementeDto) {
     return this.evenementesService.update(+id, updateEvenementeDto);
   }
 
   @Delete(':id')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.evenementesService.remove(+id);
   }
 }
