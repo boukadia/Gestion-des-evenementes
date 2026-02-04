@@ -56,7 +56,11 @@ export class EvenementesService {
     return `This action updates a #${id} evenemente`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} evenemente`;
+  async remove(id: number) {
+    const deletedEvent= await this.prisma.event.delete({
+      where:{id}
+    })
+    return plainToClass(EventResponseDto, deletedEvent, { excludeExtraneousValues: true });
+    
   }
 }
