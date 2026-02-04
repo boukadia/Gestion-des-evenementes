@@ -3,6 +3,8 @@ import { CreateEvenementeDto } from './dto/create-evenemente.dto';
 import { UpdateEvenementeDto } from './dto/update-evenemente.dto';
 import { PrismaService } from 'src/prisma.service';
 import { User } from 'generated/prisma/client';
+import { EventResponseDto } from './dto/event-response.dto';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class EvenementesService {
@@ -27,11 +29,13 @@ export class EvenementesService {
       }
     });
 
-    return evenemente;
+    return plainToClass(EventResponseDto, evenemente, { excludeExtraneousValues: true });
   }
 
   findAll() {
-    return `This action returns all evenementes`;
+    const evenementes=this.prisma.event.findMany();
+    return evenementes;
+    
   }
 
   findOne(id: number) {
