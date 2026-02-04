@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put, Req } from '@nestjs/common';
 import { EvenementesService } from './evenementes.service';
 import { CreateEvenementeDto } from './dto/create-evenemente.dto';
 import { UpdateEvenementeDto } from './dto/update-evenemente.dto';
@@ -14,8 +14,8 @@ export class EvenementesController {
   @Post()
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  create(@Body() createEvenementeDto: CreateEvenementeDto) {
-    return this.evenementesService.create(createEvenementeDto);
+  create(@Body() createEvenementeDto: CreateEvenementeDto, @Req() req) {
+    return this.evenementesService.create(createEvenementeDto, req.user);
   }
 
   @Get()
@@ -28,7 +28,7 @@ export class EvenementesController {
     return this.evenementesService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(Role.ADMIN)
   update(@Param('id') id: string, @Body() updateEvenementeDto: UpdateEvenementeDto) {
