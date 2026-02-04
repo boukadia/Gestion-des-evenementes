@@ -10,7 +10,9 @@ import { Role } from 'generated/prisma/enums';
 @Controller('tickets')
 @UseGuards(JwtGuard)
 export class TicketsController {
-  constructor(private readonly ticketsService: TicketsService) {}
+  constructor(private readonly ticketsService: TicketsService,
+    private readonly reservationsService: TicketsService
+  ) {}
 
   @Post()
   create(@Body() createTicketDto: CreateTicketDto) {
