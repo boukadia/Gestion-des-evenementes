@@ -49,7 +49,10 @@ export class EvenementesService {
   
 
   findOne(id: number) {
-    return `This action returns a #${id} evenemente`;
+    const evenement= this.prisma.event.findUnique({
+      where:{id}
+    })
+    return evenement
   }
 
   update(id: number, data: UpdateEvenementeDto) {
