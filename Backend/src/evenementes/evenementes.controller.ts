@@ -6,6 +6,7 @@ import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'generated/prisma/enums';
+import { ChangeStatusDto } from './dto/change-status.dto';
 
 @Controller('evenementes')
 export class EvenementesController {
@@ -21,6 +22,13 @@ export class EvenementesController {
   @Get()
   findAll() {
     return this.evenementesService.findAll();
+  }
+  
+  @Patch(':id/status')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  changeStatus(@Param('id') id: Number, @Body() changeStatusDto:ChangeStatusDto) {
+    return this.evenementesService.changeStatus(+id, changeStatusDto);
   }
 
   @Get(':id')
