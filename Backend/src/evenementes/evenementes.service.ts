@@ -23,7 +23,7 @@ export class EvenementesService {
       data: {
         title,
         description,
-        dateTime: new Date(dateTime),
+        dateTime,
         location,
         capacity,
         adminId: user.id,
@@ -52,8 +52,13 @@ export class EvenementesService {
     return `This action returns a #${id} evenemente`;
   }
 
-  update(id: number, updateEvenementeDto: UpdateEvenementeDto) {
-    return `This action updates a #${id} evenemente`;
+  update(id: number, data: UpdateEvenementeDto) {
+   
+    const updatedEvent= this.prisma.event.update({
+      where:{id},
+      data:data
+    })
+    return updatedEvent;
   }
 
   async remove(id: number) {
