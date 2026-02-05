@@ -61,8 +61,43 @@ export class ReservationsService {
     return `This action returns a #${id} reservation`;
   }
 
-  update(id: number, updateReservationDto: UpdateReservationStatusDto) {
-    return `This action updates a #${id} reservation`;
+  async update(id: number, data: UpdateReservationStatusDto) {
+    const reservatione = await this.prisma.reservation.findUnique({
+      where: { id },
+    });
+    if (!reservatione) {
+      throw new NotFoundException('Reservation not found');
+    }
+    console.log("data.status",data.status);
+    console.log("reservatione.status",reservatione.status);
+    
+     if (data.status === 'CONFIRMED' && reservatione.status === 'PENDING') {
+    const currentReservations = await this.prisma.reservation.count({
+      where: { 
+        eventId: reservatione.eventId, 
+        status: "CONFIRMED"
+      }
+    });
+     
+    const event = await this.prisma.event.findUnique({
+      where: { id: reservatione.eventId },
+    });
+    if (!event) {
+    throw new NotFoundException('Event not found');
+  }
+    
+    if (currentReservations >= event.capacity) {
+      throw new BadRequestException('Event is full');
+    }
+  }
+
+
+  // Update the reservation status
+  const updatedReservation = await this.prisma.reservation.update({
+    where: { id },
+    data: { status:data.status },
+  });
+    return updatedReservation;
   }
 
   remove(id: number) {

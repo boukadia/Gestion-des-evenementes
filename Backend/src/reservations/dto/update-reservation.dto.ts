@@ -10,7 +10,7 @@ export class UpdateReservationStatusDto {
 //   @IsInt()
 //   eventId?: number;
 
-  @IsOptional()
+  // @IsOptional()
   @IsEnum(ReservationStatus)
-  status?: ReservationStatus;
+  status: ReservationStatus;
 }
