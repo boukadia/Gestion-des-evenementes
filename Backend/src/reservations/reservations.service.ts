@@ -62,25 +62,33 @@ export class ReservationsService {
   }
 
   async update(id: number, data: UpdateReservationStatusDto) {
-    const reservatione = await this.prisma.reservation.findUnique({
+    const reservation = await this.prisma.reservation.findUnique({
       where: { id },
+      include: { event: true },
     });
-    if (!reservatione) {
+
+    if (!reservation) {
       throw new NotFoundException('Reservation not found');
     }
+    if (reservation.status === data.status) {
+    throw new BadRequestException(`Reservation is already ${data.status}`);
+  }
+  if (reservation.status === 'CANCELED' && data.status === 'CONFIRMED') {
+    throw new BadRequestException('Cannot confirm a canceled reservation');
+  }
     console.log("data.status",data.status);
-    console.log("reservatione.status",reservatione.status);
+    console.log("reservation.status",reservation.status);
     
-     if (data.status === 'CONFIRMED' && reservatione.status === 'PENDING') {
+     if (data.status === 'CONFIRMED' && reservation.status === 'PENDING') {
     const currentReservations = await this.prisma.reservation.count({
       where: { 
-        eventId: reservatione.eventId, 
+        eventId: reservation.eventId, 
         status: "CONFIRMED"
       }
     });
      
     const event = await this.prisma.event.findUnique({
-      where: { id: reservatione.eventId },
+      where: { id: reservation.eventId },
     });
     if (!event) {
     throw new NotFoundException('Event not found');
@@ -100,7 +108,21 @@ export class ReservationsService {
     return updatedReservation;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} reservation`;
+  async annule(id: number) {
+    const reservation=await this.prisma.reservation.findUnique({
+      where:{id}
+    });
+    if(!reservation){
+      throw new NotFoundException('Reservation not found');
+    }
+    if(reservation.status==="CANCELED"){
+      throw new BadRequestException('Reservation already canceled');
+    }
+    const resrvationDeleted=await this.prisma.reservation.update({
+      where:{id},
+      data:{status:"CANCELED"}
+    })
+
+    return resrvationDeleted ;
   }
 }
