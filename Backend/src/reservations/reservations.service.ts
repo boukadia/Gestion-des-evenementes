@@ -53,8 +53,21 @@ export class ReservationsService {
     return reservation ;
   }
 
-  findAll() {
-    return `This action returns all reservations`;
+  async findAll() {
+    const reservation= await  this.prisma.reservation.findMany({
+      include:{event:true,user:true},
+      orderBy: { createdAt: 'desc' }
+    });
+    return  reservation;
+    
+  }
+  async findMyReservations(userId: number) {
+    const reservations = await this.prisma.reservation.findMany({
+      where: { userId },
+      include: { event: true },
+      orderBy: { createdAt: 'desc' }
+    });
+    return reservations;
   }
 
   findOne(id: number) {

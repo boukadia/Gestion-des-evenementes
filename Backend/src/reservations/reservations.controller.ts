@@ -24,6 +24,12 @@ export class ReservationsController {
   findAll() {
     return this.reservationsService.findAll();
   }
+  @Get('my')
+  @UseGuards(RolesGuard)
+  @Roles(Role.PARTICIPANT)
+  findMyReservations(@Req() req:any) {
+    return this.reservationsService.findMyReservations(req.user.id);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -31,6 +37,8 @@ export class ReservationsController {
   }
 
   @Patch(':id/status')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   update(@Param('id') id: string, @Body() UpdateReservationStatusDto: UpdateReservationStatusDto) {
     return this.reservationsService.update(+id, UpdateReservationStatusDto);
   }
