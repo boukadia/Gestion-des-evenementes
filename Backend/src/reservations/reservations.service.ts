@@ -70,9 +70,20 @@ export class ReservationsService {
     return reservations;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} reservation`;
+
+async findOne(id: number) {
+  const reservation = await this.prisma.reservation.findUnique({
+    where: { id },
+    include: { event: true, user: true },
+  });
+
+  if (!reservation) {
+    throw new ForbiddenException('Reservation not found');
   }
+
+  return reservation;
+}
+
 
   async update(id: number, data: UpdateReservationStatusDto) {
     const reservation = await this.prisma.reservation.findUnique({
