@@ -30,7 +30,7 @@ export class ReservationsController {
     return this.reservationsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch(':id/status')
   update(@Param('id') id: string, @Body() UpdateReservationStatusDto: UpdateReservationStatusDto) {
     return this.reservationsService.update(+id, UpdateReservationStatusDto);
   }
