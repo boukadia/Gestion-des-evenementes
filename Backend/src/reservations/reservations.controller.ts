@@ -20,7 +20,7 @@ export class ReservationsController {
 
   @Get()
   @UseGuards(RolesGuard)
-  @Roles(Role.PARTICIPANT)
+  @Roles(Role.ADMIN)
   findAll() {
     return this.reservationsService.findAll();
   }
