@@ -35,10 +35,10 @@ export class ReservationsController {
     return this.reservationsService.update(+id, UpdateReservationStatusDto);
   }
 
-  @Delete(':id')
+  @Patch(':id/annule')
   @UseGuards(RolesGuard)
   @Roles(Role.PARTICIPANT)
   remove(@Param('id') id: string) {
-    return this.reservationsService.remove(+id);
+    return this.reservationsService.annule(+id);
   }
 }
