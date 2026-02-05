@@ -48,13 +48,16 @@ export class EvenementesService {
   }
   
 
-  findOne(id: number) {
-    return `This action returns a #${id} evenemente`;
+  async findOne(id: number) {
+    const evenement= await this.prisma.event.findUnique({
+      where:{id}
+    })
+    return evenement;
   }
 
-  update(id: number, data: UpdateEvenementeDto) {
+  async update(id: number, data: UpdateEvenementeDto) {
    
-    const updatedEvent= this.prisma.event.update({
+    const updatedEvent= await this.prisma.event.update({
       where:{id},
       data:data
     })

@@ -1,20 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
-import { UpdateReservationDto } from './dto/update-reservation.dto';
+import { UpdateReservationStatusDto } from './dto/update-reservation.dto';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'generated/prisma/enums';
+import { User } from 'generated/prisma/client';
 
 @Controller('reservations')
 @UseGuards(JwtGuard)
 export class ReservationsController {
-  constructor(private readonly reservationsService: ReservationsService) {}
+  constructor(private readonly reservationsService: ReservationsService,) {}
 
   @Post()
-  create(@Body() createReservationDto: CreateReservationDto) {
-    return this.reservationsService.create(createReservationDto);
+  create(@Body() createReservationDto: CreateReservationDto,@Req() req:any) {
+    return this.reservationsService.create(createReservationDto,req.user);
   }
 
   @Get()
@@ -30,8 +31,8 @@ export class ReservationsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReservationDto: UpdateReservationDto) {
-    return this.reservationsService.update(+id, updateReservationDto);
+  update(@Param('id') id: string, @Body() UpdateReservationStatusDto: UpdateReservationStatusDto) {
+    return this.reservationsService.update(+id, UpdateReservationStatusDto);
   }
 
   @Delete(':id')
