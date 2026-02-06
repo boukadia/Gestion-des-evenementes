@@ -53,7 +53,10 @@ export class ReservationsService {
     return reservation ;
   }
 
-  async findAll() {
+  async findAll(user: User) {
+    if (user.role !== "ADMIN") {
+    throw new ForbiddenException('Only admin can update status');
+  }
     const reservation= await  this.prisma.reservation.findMany({
       include:{event:true,user:true},
       orderBy: { createdAt: 'desc' }
@@ -78,14 +81,17 @@ async findOne(id: number) {
   });
 
   if (!reservation) {
-    throw new ForbiddenException('Reservation not found');
+    throw new NotFoundException('Reservation not found');
   }
 
   return reservation;
 }
 
 
-  async update(id: number, data: UpdateReservationStatusDto) {
+  async update(id: number, data: UpdateReservationStatusDto,user: User) {
+    if (user.role !== "ADMIN") {
+    throw new ForbiddenException('Only admin can update status');
+  }
     const reservation = await this.prisma.reservation.findUnique({
       where: { id },
       include: { event: true },
@@ -97,6 +103,7 @@ async findOne(id: number) {
     if (reservation.status === data.status) {
     throw new BadRequestException(`Reservation is already ${data.status}`);
   }
+  
   if (reservation.status === 'CANCELED' && data.status === 'CONFIRMED') {
     throw new BadRequestException('Cannot confirm a canceled reservation');
   }
@@ -122,6 +129,21 @@ async findOne(id: number) {
       throw new BadRequestException('Event is full');
     }
   }
+  //generer  ticket
+  if (data.status === 'CONFIRMED' && reservation.status === 'PENDING') {
+
+  const pdfUrl = `tickets/ticket-${reservation.id}-${Date.now()}.pdf`;
+
+  await this.prisma.ticket.create({
+    data: {
+      pdfUrl: pdfUrl,
+      reservationId: reservation.id,
+      userId: reservation.userId,
+      eventId: reservation.eventId,
+    },
+  });
+}
+
 
 
   // Update the reservation status
@@ -129,15 +151,20 @@ async findOne(id: number) {
     where: { id },
     data: { status:data.status },
   });
+
     return updatedReservation;
   }
 
-  async annule(id: number) {
+  async annule(id: number,user: User) {
     const reservation=await this.prisma.reservation.findUnique({
       where:{id}
     });
+    
     if(!reservation){
       throw new NotFoundException('Reservation not found');
+    }
+    if (reservation.userId!==user.id) {
+      throw new ForbiddenException('You can only cancel your own reservations');
     }
     if(reservation.status==="CANCELED"){
       throw new BadRequestException('Reservation already canceled');
