@@ -38,6 +38,15 @@ export class EvenementesService {
     return evenementes;
     
   }
+
+  async findPublished() {
+    const events = await this.prisma.event.findMany({
+      where: { status: 'PUBLISHED' },
+      orderBy: { dateTime: 'asc' },
+    });
+    return events;
+  }
+
   async changeStatus(id: number, changeStatusDto: ChangeStatusDto) {
     const evenemente = await this.prisma.event.update({
       where: { id },

@@ -23,6 +23,11 @@ export class EvenementesController {
   findAll() {
     return this.evenementesService.findAll();
   }
+
+  @Get('published')
+  findPublished() {
+    return this.evenementesService.findPublished();
+  }
   
   @Patch(':id/status')
   @UseGuards(JwtGuard, RolesGuard)
