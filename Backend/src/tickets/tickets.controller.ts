@@ -39,6 +39,20 @@ export class TicketsController {
     return this.ticketsService.findOne(+id,req.user);
   }
 
+  @Get(':id/download')
+  async downloadTicket(
+    @Param('id') id: string,
+    @Req() req: any,
+    @Res() res: Response
+  ) {
+    const pdfPath = await this.ticketsService.getTicketPdfPath(+id, req.user);
+    const fileName = `ticket-${id}.pdf`;
+    
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    res.sendFile(path.resolve(pdfPath));
+  }
+
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
   //   return this.ticketsService.update(+id, updateTicketDto);
