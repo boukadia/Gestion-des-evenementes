@@ -21,8 +21,8 @@ export class ReservationsController {
   @Get()
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
-  findAll() {
-    return this.reservationsService.findAll();
+  findAll(@Req() req:any) {
+    return this.reservationsService.findAll(req.user);
   }
   @Get('my')
   @UseGuards(RolesGuard)
@@ -30,7 +30,6 @@ export class ReservationsController {
   findMyReservations(@Req() req:any) {
     return this.reservationsService.findMyReservations(req.user.id);
   }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.reservationsService.findOne(+id);
@@ -39,14 +38,14 @@ export class ReservationsController {
   @Patch(':id/status')
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
-  update(@Param('id') id: string, @Body() UpdateReservationStatusDto: UpdateReservationStatusDto) {
-    return this.reservationsService.update(+id, UpdateReservationStatusDto);
+  update(@Param('id') id: string, @Body() UpdateReservationStatusDto: UpdateReservationStatusDto, @Req() req:any) {
+    return this.reservationsService.update(+id, UpdateReservationStatusDto,req.user);
   }
 
   @Patch(':id/annule')
   @UseGuards(RolesGuard)
   @Roles(Role.PARTICIPANT)
-  remove(@Param('id') id: string) {
-    return this.reservationsService.annule(+id);
+  remove(@Param('id') id: string, @Req() req:any) {
+    return this.reservationsService.annule(+id,req.user);
   }
 }

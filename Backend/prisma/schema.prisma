@@ -39,6 +39,8 @@ model User {
   // relations
   reservations  Reservation[] @relation("UserReservations")
   events       Event[]      @relation("EventOrganizer")
+  tickets      Ticket[]  
+  
 
 
 
@@ -56,6 +58,7 @@ model Event {
   admin     User          @relation("EventOrganizer", fields: [adminId], references: [id])
   adminId   Int
   reservations  Reservation[]
+  tickets      Ticket[]  
 }
 
 model Reservation {
@@ -77,6 +80,13 @@ model Ticket {
   //relations
   reservation    Reservation   @relation(fields: [reservationId], references: [id])
   reservationId  Int           @unique
+   user           User          @relation(fields: [userId], references: [id]) 
+  userId         Int
+  event          Event         @relation(fields: [eventId], references: [id]) 
+  eventId        Int
 
 }
+
+
+
 
