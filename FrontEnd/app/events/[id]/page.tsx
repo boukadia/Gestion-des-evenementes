@@ -1,1 +1,0 @@
-// Event details page component
