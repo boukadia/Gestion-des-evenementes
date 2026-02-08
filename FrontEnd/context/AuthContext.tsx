@@ -46,7 +46,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
- 
+  const login = async (email: string, password: string) => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || 'Login failed');
+      }
+
+      const data = await res.json();
+      
+      setToken(data.access_token);
+      setUser(data.user);
+      
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const register = async (name: string, email: string, password: string) => {
     try {
