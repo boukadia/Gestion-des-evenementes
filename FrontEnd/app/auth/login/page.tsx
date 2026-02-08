@@ -20,8 +20,13 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await login(email, password);
-      router.push('/');
+      const userData = await login(email, password);
+      // Redirect based on user role
+      if (userData?.role === 'ADMIN') {
+        router.push('/dashboard/admin');
+      } else {
+        router.push('/');
+      }
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {
