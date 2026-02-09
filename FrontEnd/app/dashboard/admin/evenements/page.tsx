@@ -6,6 +6,7 @@ import { Event } from '@/types/event';
 import { getAllEvents, updateEventStatus, deleteEvent } from '@/services/evenements/evenements.api';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import styles from './page.module.css';
 
 export default function AdminEventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -52,74 +53,63 @@ export default function AdminEventsPage() {
     }
   };
 
+  const getStatusClass = (status: string) => {
+    if (status === 'PUBLISHED') return styles.published;
+    if (status === 'CANCELED') return styles.canceled;
+    return styles.draft;
+  };
+
   return (
     <ProtectedRoute requireAdmin>
       <AdminLayout>
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>Events Management</h1>
-          <Link
-            href="/dashboard/admin/evenements/create"
-            className="btn btn-primary"
-            style={{
-              padding: '0.75rem 1.5rem',
-              textDecoration: 'none',
-              display: 'inline-block'
-            }}
-          >
-            ➕ Create New Event
-          </Link>
-        </div>
+          <div className={styles.header}>
+            <h1 className={styles.pageTitle}>Events Management</h1>
+            <Link href="/dashboard/admin/evenements/create" className={`btn btn-primary ${styles.createButton}`}>
+              ➕ Create New Event
+            </Link>
+          </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '3rem' }}>
+          <div className={styles.loadingContainer}>
             <div className="spinner-border text-primary" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
         ) : events.length === 0 ? (
-          <div style={{
-            backgroundColor: 'white',
-            padding: '3rem',
-            borderRadius: '12px',
-            textAlign: 'center',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-          }}>
-            <p style={{ fontSize: '1.2rem', color: '#7f8c8d' }}>No events found</p>
+          <div className={styles.emptyState}>
+            <p className={styles.emptyStateText}>No events found</p>
             <Link href="/dashboard/admin/evenements/create" className="btn btn-primary" style={{ marginTop: '1rem' }}>
               Create First Event
             </Link>
           </div>
         ) : (
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-            overflow: 'hidden'
-          }}>
+          <div className={styles.tableContainer}>
             <table className="table table-hover" style={{ marginBottom: 0 }}>
-              <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <thead className={styles.tableHeader}>
                 <tr>
-                  <th style={{ padding: '1rem' }}>Title</th>
-                  <th style={{ padding: '1rem' }}>Location</th>
-                  <th style={{ padding: '1rem' }}>Date</th>
-                    <th style={{ padding: '1rem' }}>Capacity</th>
-                  <th style={{ padding: '1rem' }}>Status</th>
-                  <th style={{ padding: '1rem', textAlign: 'center' }}>Actions</th>
+                  <th className={styles.tableCellHeader}>Title</th>
+                  <th className={styles.tableCellHeader}>Location</th>
+                  <th className={styles.tableCellHeader}>Date</th>
+                  <th className={styles.tableCellHeader}>Capacity</th>
+                  <th className={styles.tableCellHeader}>Status</th>
+                  <th className={`${styles.tableCellHeader} ${styles.actionsCell}`}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {events.map((event) => (
                   <tr key={event.id}>
-                    <td style={{ padding: '1rem', fontWeight: 'bold' }}>{event.title}</td>
-                    <td style={{ padding: '1rem' }}>{event.location}</td>
-                    <td style={{ padding: '1rem' }}>
+                    <td className={styles.tableCell}>
+                      <div className={styles.eventTitle}>{event.title}</div>
+                    </td>
+                    <td className={styles.tableCell}>{event.location}</td>
+                    <td className={styles.tableCell}>
                       {new Date(event.dateTime).toLocaleDateString()}
                     </td>
-                    <td style={{ padding: '1rem' }}>{event.capacity}</td>
-                    <td style={{ padding: '1rem' }}>
+                    <td className={styles.tableCell}>{event.capacity}</td>
+                    <td className={styles.tableCell}>
                       <select
-                        className="form-select form-select-sm"
+                        className={`form-select form-select-sm ${styles.statusSelect}`}
                         value={event.status}
                         onChange={(e) => handleStatusChange(event.id, e.target.value as 'DRAFT' | 'PUBLISHED' | 'CANCELED')}
                         style={{
@@ -141,8 +131,8 @@ export default function AdminEventsPage() {
                         <option value="CANCELED">CANCELED</option>
                       </select>
                     </td>
-                    <td style={{ padding: '1rem', textAlign: 'center' }}>
-                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                    <td className={`${styles.tableCell} ${styles.actionsCell}`}>
+                      <div className={styles.buttonGroup}>
                         <Link
                           href={`/dashboard/admin/evenements/${event.id}`}
                           className="btn btn-sm btn-outline-primary"

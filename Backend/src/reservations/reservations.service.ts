@@ -58,7 +58,7 @@ export class ReservationsService {
     throw new ForbiddenException('Only admin can update status');
   }
     const reservation= await  this.prisma.reservation.findMany({
-      include:{event:true,user:true},
+      include:{event:true,user:true,ticket:true},
       orderBy: { createdAt: 'desc' }
     });
     return  reservation;

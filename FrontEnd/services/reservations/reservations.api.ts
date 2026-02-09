@@ -35,6 +35,8 @@ export const updateReservationStatus = async (
       },
       body: JSON.stringify({ status })
     });
+    console.log("response",response);
+    
 
     if (!response.ok) {
       return { success: false, error: 'Failed to update reservation status' };
