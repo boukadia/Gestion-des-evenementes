@@ -59,23 +59,23 @@ export class EvenementesService {
 
   async findOne(id: number) {
     const evenement= await this.prisma.event.findUnique({
-      where:{id}
-    })
+      where: { id: id }
+    });
     return evenement;
   }
 
   async update(id: number, data: UpdateEvenementeDto) {
    
     const updatedEvent= await this.prisma.event.update({
-      where:{id},
-      data:data
+      where: { id: id },
+      data: data
     })
     return updatedEvent;
   }
 
   async remove(id: number) {
     const deletedEvent= await this.prisma.event.delete({
-      where:{id}
+      where:{ id: id }
     })
     return plainToClass(EventResponseDto, deletedEvent, { excludeExtraneousValues: true });
     

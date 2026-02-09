@@ -25,7 +25,7 @@ export default function LoginPage() {
       if (userData?.role === 'ADMIN') {
         router.push('/dashboard/admin');
       } else {
-        router.push('/');
+        router.push('/dashboard/participant/');
       }
     } catch (err: any) {
       setError(err.message || 'Login failed');
