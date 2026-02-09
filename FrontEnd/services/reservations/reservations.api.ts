@@ -38,8 +38,20 @@ export const updateReservationStatus = async (
     console.log("response",response);
     
 
-    if (!response.ok) {
-      return { success: false, error: 'Failed to update reservation status' };
+     if (!response.ok) {
+      // جلب رسالة الخطأ من Backend
+      let errorMessage = `HTTP Error: ${response.status}`;
+      
+      try {
+        const errorData = await response.json();
+        // رسالة الخطأ من Backend
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (parseError) {
+        // إذا لم يستطع parse JSON، استخدم status text
+        errorMessage = response.statusText || errorMessage;
+      }
+      
+      return { success: false, error: errorMessage };
     }
 
     return { success: true };

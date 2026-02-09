@@ -45,11 +45,19 @@ export class TicketsController {
     @Req() req: any,
     @Res() res: Response
   ) {
-    const pdfPath = await this.ticketsService.getTicketPdfPath(+id, req.user);
+    const isAdmin = req.user.role === Role.ADMIN;
+    const pdfPath = await this.ticketsService.getTicketPdfPath(+id, req.user, isAdmin);
     const fileName = `ticket-${id}.pdf`;
     
+    // CORS headers
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || 'http://localhost:3001');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    
+    // PDF headers
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    
     res.sendFile(path.resolve(pdfPath));
   }
 
@@ -58,11 +66,11 @@ export class TicketsController {
   //   return this.ticketsService.update(+id, updateTicketDto);
   // }
 
-  // @Delete(':id')
-  // @UseGuards(RolesGuard)
-  // @Roles(Role.ADMIN)
-  // remove(@Param('id') id: string) {
-  //   return this.reservationsService.remove(+id);
-  // }
+  @Delete(':id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  async remove(@Param('id') id: string) {
+    return this.ticketsService.remove(+id);
+  }
  
 }
