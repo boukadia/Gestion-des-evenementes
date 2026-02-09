@@ -1,0 +1,108 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.createButton {
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.loadingContainer {
+  text-align: center;
+  padding: 3rem;
+}
+
+.emptyState {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.emptyStateText {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+}
+
+.tableContainer {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.tableHeader {
+  background-color: #f8f9fa;
+}
+
+.tableCellHeader {
+  padding: 1rem;
+}
+
+.tableCell {
+  padding: 1rem;
+}
+
+.eventTitle {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.eventDescription {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusBadge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+.statusBadge.published {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.statusBadge.draft {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.statusBadge.canceled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.statusSelect {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.actionsCell {
+  text-align: center;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}

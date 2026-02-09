@@ -1,0 +1,86 @@
+.pageTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.loadingContainer {
+  text-align: center;
+  padding: 3rem;
+}
+
+.emptyState {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.emptyStateText {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+}
+
+.tableContainer {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.tableHeader {
+  background-color: #f8f9fa;
+}
+
+.tableCellHeader {
+  padding: 1rem;
+}
+
+.tableCell {
+  padding: 1rem;
+}
+
+.userInfo {
+  font-weight: bold;
+}
+
+.userEmail {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.eventTitle {
+  font-weight: bold;
+}
+
+.statusBadge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+.statusBadge.confirmed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.statusBadge.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.statusBadge.canceled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.actionsCell {
+  text-align: center;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}

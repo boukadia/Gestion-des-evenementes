@@ -4,6 +4,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLayout from '@/components/AdminLayout';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import styles from './page.module.css';
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState({
@@ -36,77 +37,47 @@ export default function AdminDashboardPage() {
     <ProtectedRoute requireAdmin>
       <AdminLayout>
         <div>
-          <h2 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '2rem' }}>Welcome to Admin Dashboard</h2>
+          <h2 className={styles.pageTitle}>Welcome to Admin Dashboard</h2>
           
           {/* Stats Cards */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '1.5rem',
-            marginBottom: '2rem'
-          }}>
-            <div style={{
-              backgroundColor: 'white',
-              padding: '1.5rem',
-              borderRadius: '12px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>📊</div>
-              <h3 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#3498db', margin: 0 }}>
+          <div className={styles.statsGrid}>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>📊</div>
+              <h3 className={`${styles.statValue} ${styles.blue}`}>
                 {stats.totalEvents}
               </h3>
-              <p style={{ color: '#7f8c8d', marginTop: '0.5rem', marginBottom: 0 }}>Total Events</p>
+              <p className={styles.statLabel}>Total Events</p>
             </div>
 
-            <div style={{
-              backgroundColor: 'white',
-              padding: '1.5rem',
-              borderRadius: '12px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>📝</div>
-              <h3 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#2ecc71', margin: 0 }}>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>📝</div>
+              <h3 className={`${styles.statValue} ${styles.green}`}>
                 {stats.totalReservations}
               </h3>
-              <p style={{ color: '#7f8c8d', marginTop: '0.5rem', marginBottom: 0 }}>Total Reservations</p>
+              <p className={styles.statLabel}>Total Reservations</p>
             </div>
 
-            <div style={{
-              backgroundColor: 'white',
-              padding: '1.5rem',
-              borderRadius: '12px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>👥</div>
-              <h3 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#e74c3c', margin: 0 }}>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>👥</div>
+              <h3 className={`${styles.statValue} ${styles.red}`}>
                 {stats.totalUsers}
               </h3>
-              <p style={{ color: '#7f8c8d', marginTop: '0.5rem', marginBottom: 0 }}>Total Users</p>
+              <p className={styles.statLabel}>Total Users</p>
             </div>
 
-            <div style={{
-              backgroundColor: 'white',
-              padding: '1.5rem',
-              borderRadius: '12px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>✅</div>
-              <h3 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#f39c12', margin: 0 }}>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>✅</div>
+              <h3 className={`${styles.statValue} ${styles.orange}`}>
                 {stats.publishedEvents}
               </h3>
-              <p style={{ color: '#7f8c8d', marginTop: '0.5rem', marginBottom: 0 }}>Published Events</p>
+              <p className={styles.statLabel}>Published Events</p>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div style={{
-            backgroundColor: 'white',
-            padding: '2rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-          }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>Quick Actions</h3>
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <div className={styles.quickActionsCard}>
+            <h3 className={styles.quickActionsTitle}>Quick Actions</h3>
+            <div className={styles.quickActionsButtons}>
               <Link href="/dashboard/admin/evenements/create" className="btn btn-primary">
                 ➕ Create New Event
               </Link>
