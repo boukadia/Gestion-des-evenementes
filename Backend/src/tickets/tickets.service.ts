@@ -171,7 +171,7 @@ export class TicketsService {
             <div class="footer">
                 <p>✅ Generated on ${new Date().toLocaleDateString('fr-FR')} at ${new Date().toLocaleTimeString('fr-FR')}</p>
                 <p>Please present this ticket at the event entrance</p>
-            </div>
+            </div>  
         </div>
     </body>
     </html>
@@ -193,6 +193,28 @@ export class TicketsService {
     });
 
     await browser.close();
+  }
+
+  async remove(id: number) {
+    const ticket = await this.prisma.ticket.findUnique({
+      where: { id }
+    });
+
+    if (!ticket) {
+      throw new NotFoundException('Ticket not found');
+    }
+
+    // Delete PDF file if it exists
+    if (fs.existsSync(ticket.pdfUrl)) {
+      fs.unlinkSync(ticket.pdfUrl);
+    }
+
+    // Delete ticket from database
+    await this.prisma.ticket.delete({
+      where: { id }
+    });
+
+    return { message: 'Ticket deleted successfully' };
   }
   
 }

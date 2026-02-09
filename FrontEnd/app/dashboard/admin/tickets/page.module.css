@@ -1,0 +1,194 @@
+.pageTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.filterSection {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 250px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #6366F1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.statusFilter {
+  min-width: 200px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.statusFilter:focus {
+  outline: none;
+  border-color: #6366F1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.statsRow {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.statCard {
+  flex: 1;
+  background-color: white;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.statIcon {
+  font-size: 2rem;
+}
+
+.statContent {
+  flex: 1;
+}
+
+.statValue {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin: 0;
+  color: #6366F1;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+.loadingContainer {
+  text-align: center;
+  padding: 3rem;
+}
+
+.emptyState {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.emptyStateText {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+}
+
+.tableContainer {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.tableHeader {
+  background-color: #f8f9fa;
+}
+
+.tableCellHeader {
+  padding: 1rem;
+}
+
+.tableCell {
+  padding: 1rem;
+}
+
+.ticketId {
+  font-weight: 600;
+  color: #6366F1;
+}
+
+.eventInfo {
+  font-weight: 600;
+}
+
+.eventLocation {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.userInfo {
+  font-weight: 500;
+}
+
+.userEmail {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.statusBadge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.statusBadge.confirmed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.statusBadge.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.statusBadge.refused {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.statusBadge.canceled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.actionsCell {
+  text-align: center;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.downloadButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.deleteButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
