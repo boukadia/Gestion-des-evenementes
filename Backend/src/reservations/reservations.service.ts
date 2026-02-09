@@ -107,6 +107,11 @@ async findOne(id: number) {
   if (reservation.status === 'CANCELED' && data.status === 'CONFIRMED') {
     throw new BadRequestException('Cannot confirm a canceled reservation');
   }
+  
+  if (reservation.status === "CONFIRMED") {
+  throw new BadRequestException('Cannot cancel a confirmed reservation');
+}
+
     console.log("data.status",data.status);
     console.log("reservation.status",reservation.status);
     
@@ -121,6 +126,7 @@ async findOne(id: number) {
     const event = await this.prisma.event.findUnique({
       where: { id: reservation.eventId },
     });
+
     if (!event) {
     throw new NotFoundException('Event not found');
   }

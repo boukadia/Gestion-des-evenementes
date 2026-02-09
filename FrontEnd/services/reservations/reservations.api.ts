@@ -110,3 +110,31 @@ export const updateReservationStatus = async (
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }
 };
+// Cancel my reservation (for participants)
+export const cancelMyReservation = async (reservationId: number): Promise<{ success: boolean; error?: string }> => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/reservations/${reservationId}/annule`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      let errorMessage = `HTTP Error: ${response.status}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (parseError) {
+        errorMessage = response.statusText || errorMessage;
+      }
+      return { success: false, error: errorMessage };
+    }
+
+    return { success: true };
+  } catch (error: unknown) {
+    console.error('Error canceling reservation:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+  }
+};

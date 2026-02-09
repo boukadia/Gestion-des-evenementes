@@ -54,7 +54,14 @@ export const downloadTicket = async (ticketId: number): Promise<{ success: boole
     });
 
     if (!response.ok) {
-      return { success: false, error: 'Failed to download tickeet' };
+      let errorMessage = 'Failed to download ticket';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (parseError) {
+        errorMessage = response.statusText || errorMessage;
+      }
+      return { success: false, error: errorMessage };
     }
     
 
@@ -74,7 +81,7 @@ export const downloadTicket = async (ticketId: number): Promise<{ success: boole
     return { success: true };
   } catch (error: unknown) {
     console.error('Error downloading ticket:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    return { success: false, error: error instanceof Error ? error.message : 'Network error' };
   }
 };
 
@@ -90,12 +97,19 @@ export const deleteTicket = async (ticketId: number): Promise<{ success: boolean
     });
 
     if (!response.ok) {
-      return { success: false, error: 'Failed to delete ticket' };
+      let errorMessage = 'Failed to delete ticket';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (parseError) {
+        errorMessage = response.statusText || errorMessage;
+      }
+      return { success: false, error: errorMessage };
     }
 
     return { success: true };
   } catch (error: unknown) {
     console.error('Error deleting ticket:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    return { success: false, error: error instanceof Error ? error.message : 'Network error' };
   }
 };

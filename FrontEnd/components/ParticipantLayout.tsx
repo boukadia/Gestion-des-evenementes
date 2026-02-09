@@ -20,16 +20,16 @@ export default function ParticipantLayout({ children }: ParticipantLayoutProps) 
   };
 
   const navigationItems = [
-    { href: '/dashboard/participant/evenements', label: 'Events Available', icon: '🎪' },
-    { href: '/dashboard/participant/my-reservations', label: 'My Reservations', icon: '📅' },
-    { href: '/dashboard/participant/my-tickets', label: 'My Tickets', icon: '🎫' },
+    { href: '/dashboard/participant/evenements', label: 'Events Available' },
+    { href: '/dashboard/participant/my-reservations', label: 'My Reservations' },
+    { href: '/dashboard/participant/my-tickets', label: 'My Tickets' },
   ];
 
   return (
     <div className={styles.container}>
       <aside className={styles.sidebar}>
         <div className={styles.logo}>
-          <h2>🎪 GestEvent</h2>
+          <h2> GestEvent</h2>
           <p>Participant Dashboard</p>
         </div>
         

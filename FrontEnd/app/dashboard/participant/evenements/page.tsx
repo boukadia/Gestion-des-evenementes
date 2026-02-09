@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import ParticipantLayout from '@/components/ParticipantLayout';
 import { Event } from '@/types/event';
 import { getPublishedEvents } from '@/services/evenements/evenements.api';
 import { createReservation } from '@/services/reservations/reservations.api';
 import styles from './page.module.css';
+import ParticipantLayout from '@/components/ParticipantLayout';
 
 export default function ParticipantEvenementsPage() {
   const [events, setEvents] = useState<Event[]>([]);

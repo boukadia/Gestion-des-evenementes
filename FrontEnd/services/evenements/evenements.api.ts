@@ -58,15 +58,21 @@ export const createEvent = async (eventData: {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      return { success: false, error: error.message };
+      let errorMessage = 'Failed to create event';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (parseError) {
+        errorMessage = response.statusText || errorMessage;
+      }
+      return { success: false, error: errorMessage };
     }
 
     const data = await response.json();
     return { success: true, data };
   } catch (error: unknown) {
     console.error('Error creating event:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    return { success: false, error: error instanceof Error ? error.message : 'Network error' };
   }
 };
 
@@ -94,15 +100,21 @@ export const updateEvent = async (
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      return { success: false, error: error.message };
+      let errorMessage = 'Failed to update event';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (parseError) {
+        errorMessage = response.statusText || errorMessage;
+      }
+      return { success: false, error: errorMessage };
     }
 
     const data = await response.json();
     return { success: true, data };
   } catch (error: unknown) {
     console.error('Error updating event:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    return { success: false, error: error instanceof Error ? error.message : 'Network error' };
   }
 };
 
@@ -170,12 +182,19 @@ export const deleteEvent = async (eventId: number): Promise<{ success: boolean; 
     });
 
     if (!response.ok) {
-      return { success: false, error: 'Failed to delete event' };
+      let errorMessage = 'Failed to delete event';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (parseError) {
+        errorMessage = response.statusText || errorMessage;
+      }
+      return { success: false, error: errorMessage };
     }
 
     return { success: true };
   } catch (error: unknown) {
     console.error('Error deleting event:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    return { success: false, error: error instanceof Error ? error.message : 'Network error' };
   }
 };
