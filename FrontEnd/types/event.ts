@@ -5,8 +5,9 @@ export interface Event {
   dateTime: string;
   location: string;
   capacity: number;
-  status: 'DRAFT' | 'PUBLISHED' | 'CANCELED';
+  status: 'DRAFT' | 'PUBLISHED' | 'CANCELLED';
   createdAt: string;
+  updatedAt?: string;
   adminId: number;
   admin?: {
     id: number;

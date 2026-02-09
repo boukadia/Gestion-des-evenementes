@@ -2,10 +2,33 @@ import { Event } from '@/types/event';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
+// Get all published events (for participants)
+export const getPublishedEvents = async (): Promise<Event[]> => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/evenementes/published`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) throw new Error('Failed to fetch published events');
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching published events:', error);
+    return [];
+  }
+};
+
 // Fetch all events (for admin)
 export const getAllEvents = async (): Promise<Event[]> => {
   try {
-    const response = await fetch(`${API_URL}/evenementes`);
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/evenementes`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     if (!response.ok) throw new Error('Failed to fetch events');
     return response.json();
   } catch (error) {
@@ -86,7 +109,13 @@ export const updateEvent = async (
 // Get event by ID
 export const getEventById = async (eventId: number): Promise<Event | null> => {
   try {
-    const response = await fetch(`${API_URL}/evenementes/${eventId}`);
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/evenementes/${eventId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
     if (!response.ok) throw new Error('Failed to fetch event');
     return response.json();
   } catch (error) {
@@ -98,7 +127,7 @@ export const getEventById = async (eventId: number): Promise<Event | null> => {
 // Update event status
 export const updateEventStatus = async (
   eventId: number,
-  status: 'DRAFT' | 'PUBLISHED' | 'CANCELED'
+  status: 'DRAFT' | 'PUBLISHED' | 'CANCELLED'
 ): Promise<{ success: boolean; error?: string }> => {
   try {
     const token = localStorage.getItem('token');
@@ -112,7 +141,14 @@ export const updateEventStatus = async (
     });
 
     if (!response.ok) {
-      return { success: false, error: 'Failed to update status' };
+      let errorMessage = 'Failed to update status';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (parseError) {
+        errorMessage = response.statusText || errorMessage;
+      }
+      return { success: false, error: errorMessage };
     }
 
     return { success: true };
