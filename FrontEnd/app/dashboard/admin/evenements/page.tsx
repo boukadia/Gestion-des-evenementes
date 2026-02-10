@@ -5,14 +5,16 @@ import AdminLayout from '@/components/AdminLayout';
 import { Event } from '@/types/event';
 import { getAllEvents, updateEventStatus, deleteEvent } from '@/services/evenements/evenements.api';
 import { useEffect, useState } from 'react';
-import Toast, { ToastType } from '@/components/Toast';
 import Link from 'next/link';
 import styles from './page.module.css';
+import Toast, { ToastType } from '@/components/Toast';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function AdminEventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{ eventId: number } | null>(null);
 
   useEffect(() => {
     fetchEvents();
@@ -42,23 +44,22 @@ export default function AdminEventsPage() {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this event?')) return;
+  const handleDeleteClick = (id: number) => {
+    setConfirmDialog({ eventId: id });
+  };
 
-    const result = await deleteEvent(id);
+  const handleDeleteConfirm = async () => {
+    if (!confirmDialog) return;
+    
+    const result = await deleteEvent(confirmDialog.eventId);
+    setConfirmDialog(null);
     
     if (result.success) {
-      setEvents(events.filter(event => event.id !== id));
+      setEvents(events.filter(event => event.id !== confirmDialog.eventId));
       setToast({ message: 'Event deleted successfully!', type: 'success' });
     } else {
       setToast({ message: result.error || 'Failed to delete event', type: 'error' });
     }
-  };
-
-  const getStatusClass = (status: string) => {
-    if (status === 'PUBLISHED') return styles.published;
-    if (status === 'CANCELED') return styles.canceled;
-    return styles.draft;
   };
 
   return (
@@ -130,7 +131,7 @@ export default function AdminEventsPage() {
                       >
                         <option value="DRAFT">DRAFT</option>
                         <option value="PUBLISHED">PUBLISHED</option>
-                        <option value="CANCELED">CANCELED</option>
+                        <option value="CANCELLED">CANCELLED</option>
                       </select>
                     </td>
                     <td className={`${styles.tableCell} ${styles.actionsCell}`}>
@@ -142,7 +143,7 @@ export default function AdminEventsPage() {
                           ✏️ Edit
                         </Link>
                         <button
-                          onClick={() => handleDelete(event.id)}
+                          onClick={() => handleDeleteClick(event.id)}
                           className="btn btn-sm btn-outline-danger"
                         >
                           🗑️ Delete
@@ -157,6 +158,17 @@ export default function AdminEventsPage() {
         )}
         </div>
       </AdminLayout>
+      {confirmDialog && (
+        <ConfirmDialog
+          title="Delete Event"
+          message="Are you sure you want to delete this event? This action cannot be undone."
+          confirmText="Delete"
+          cancelText="Cancel"
+          type="danger"
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setConfirmDialog(null)}
+        />
+      )}
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </ProtectedRoute>
   );

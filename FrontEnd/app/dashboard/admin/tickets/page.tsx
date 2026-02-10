@@ -6,6 +6,7 @@ import { Ticket } from '@/types/ticket';
 import { getAllTickets, downloadTicket, deleteTicket } from '@/services/tickets/tickets.api';
 import { useEffect, useState } from 'react';
 import Toast, { ToastType } from '@/components/Toast';
+import ConfirmDialog from '@/components/ConfirmDialog';
 import styles from './page.module.css';
 
 export default function TicketsPage() {
@@ -15,6 +16,7 @@ export default function TicketsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{ ticketId: number } | null>(null);
 
   useEffect(() => {
     fetchTickets();
@@ -68,13 +70,18 @@ export default function TicketsPage() {
     }
   };
 
-  const handleDelete = async (ticketId: number) => {
-    if (!confirm('Are you sure you want to delete this ticket?')) return;
+  const handleDeleteClick = (ticketId: number) => {
+    setConfirmDialog({ ticketId });
+  };
 
-    const result = await deleteTicket(ticketId);
+  const handleDeleteConfirm = async () => {
+    if (!confirmDialog) return;
+    
+    const result = await deleteTicket(confirmDialog.ticketId);
+    setConfirmDialog(null);
     
     if (result.success) {
-      setTickets(tickets.filter(ticket => ticket.id !== ticketId));
+      setTickets(tickets.filter(ticket => ticket.id !== confirmDialog.ticketId));
       setToast({ message: 'Ticket deleted successfully!', type: 'success' });
     } else {
       setToast({ message: result.error || 'Failed to delete ticket', type: 'error' });
@@ -199,7 +206,7 @@ export default function TicketsPage() {
                             📥 Download
                           </button>
                           <button
-                            onClick={() => handleDelete(ticket.id)}
+                            onClick={() => handleDeleteClick(ticket.id)}
                             className={`btn btn-sm btn-outline-danger ${styles.deleteButton}`}
                             title="Delete Ticket"
                           >
@@ -215,6 +222,17 @@ export default function TicketsPage() {
           )}
         </div>
       </AdminLayout>
+      {confirmDialog && (
+        <ConfirmDialog
+          title="Delete Ticket"
+          message="Are you sure you want to delete this ticket? This action cannot be undone."
+          confirmText="Delete"
+          cancelText="Cancel"
+          type="danger"
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setConfirmDialog(null)}
+        />
+      )}
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </ProtectedRoute>
   );
