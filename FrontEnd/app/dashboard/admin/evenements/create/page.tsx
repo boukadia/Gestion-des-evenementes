@@ -5,10 +5,12 @@ import AdminLayout from '@/components/AdminLayout';
 import { createEvent } from '@/services/evenements/evenements.api';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Toast, { ToastType } from '@/components/Toast';
 
 export default function CreateEventPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -41,10 +43,10 @@ export default function CreateEventPage() {
     setLoading(false);
 
     if (result.success) {
-      alert('Event created successfully!');
-      router.push('/dashboard/admin/evenements');
+      setToast({ message: 'Event created successfully!', type: 'success' });
+      setTimeout(() => router.push('/dashboard/admin/evenements'), 1500);
     } else {
-      alert(`Failed to create event: ${result.error}`);
+      setToast({ message: result.error || 'Failed to create event', type: 'error' });
     }
   };
 
@@ -162,6 +164,7 @@ export default function CreateEventPage() {
         </div>
         </div>
       </AdminLayout>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </ProtectedRoute>
   );
 }

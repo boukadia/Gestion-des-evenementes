@@ -5,6 +5,7 @@ import AdminLayout from '@/components/AdminLayout';
 import { Ticket } from '@/types/ticket';
 import { getAllTickets, downloadTicket, deleteTicket } from '@/services/tickets/tickets.api';
 import { useEffect, useState } from 'react';
+import Toast, { ToastType } from '@/components/Toast';
 import styles from './page.module.css';
 
 export default function TicketsPage() {
@@ -13,6 +14,7 @@ export default function TicketsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
 
   useEffect(() => {
     fetchTickets();
@@ -60,9 +62,9 @@ export default function TicketsPage() {
     console.log("res",result);
     
     if (result.success) {
-      alert('Ticket downloaded successfully!');
+      setToast({ message: 'Ticket downloaded successfully!', type: 'success' });
     } else {
-      alert( 'Failed to download ticket');
+      setToast({ message: 'Failed to download ticket', type: 'error' });
     }
   };
 
@@ -73,9 +75,9 @@ export default function TicketsPage() {
     
     if (result.success) {
       setTickets(tickets.filter(ticket => ticket.id !== ticketId));
-      alert('Ticket deleted successfully!');
+      setToast({ message: 'Ticket deleted successfully!', type: 'success' });
     } else {
-      alert(result.error || 'Failed to delete ticket');
+      setToast({ message: result.error || 'Failed to delete ticket', type: 'error' });
     }
   };
 
@@ -213,6 +215,7 @@ export default function TicketsPage() {
           )}
         </div>
       </AdminLayout>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </ProtectedRoute>
   );
 }
