@@ -9,6 +9,11 @@ services:
       - "3000:3000"
     environment:
       DATABASE_URL: "postgresql://postgres:0000@postgres:5432/gesEvent?schema=public"
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: gesEvent
+      DB_USER: postgres
+      DB_PASSWORD: "0000"
       JWT_SECRET: "aabcf9a29f15d0aaaa23dc6a94fa717aadcccc7fc3f3fe491ec61cc9b4216967"
       PORT: 3000
       NODE_ENV: production
@@ -37,9 +42,9 @@ services:
     environment:
       POSTGRES_DB: gesEvent
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 0000
+      POSTGRES_PASSWORD: "0000"
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -49,6 +54,18 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    networks:
+      - gestevent
+    depends_on:
+      - postgres
 
 volumes:
   postgres_data:

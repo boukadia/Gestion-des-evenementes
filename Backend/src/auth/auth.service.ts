@@ -5,62 +5,62 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
 
-
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService
-  ){}
+    private readonly jwtService: JwtService,
+  ) {}
   //login
- async  login(data: LoginDto){
-    const user=await this.prisma.user.findUnique({where:{email:data.email}})
-    
+  async login(data: LoginDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: data.email },
+    });
+
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const isPasswordValid=await bcrypt.compare(data.password, user.password)
-    
+    const isPasswordValid = await bcrypt.compare(data.password, user.password);
+
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const payload={
-      sub:user.id,
-      email:user.email,
-      role:user.role
-    }
-    return { 
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    };
+    return {
       access_token: this.jwtService.sign(payload),
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role
-      }
-    }
-
+        role: user.role,
+      },
+    };
   }
-  async register(data:RegisterDto){
-    const user=await this.prisma.user.findUnique({
-      where:{email:data.email}
-    })
-    if(user){
+  async register(data: RegisterDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: data.email },
+    });
+    if (user) {
       throw new UnauthorizedException('Email already in use');
     }
-    const hashedPassword=await bcrypt.hash(data.password,10)
-    const newUser=await this.prisma.user.create({
-      data:{
-        name:data.name,
-        email:data.email,
-        password:hashedPassword
-      }
-    })
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const newUser = await this.prisma.user.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        password: hashedPassword,
+      },
+    });
     return {
-      message:'User registered successfully',
-      userId:newUser.id
-    }
+      message: 'User registered successfully',
+      userId: newUser.id,
+    };
   }
-  
+
   // create(createAuthDto: CreateAuthDto) {
   //   return 'This action adds a new auth';
   // }

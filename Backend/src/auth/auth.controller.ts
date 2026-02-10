@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -7,16 +15,13 @@ import { RegisterDto } from './dto/register.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @Post('login')
-  create(@Body() body: LoginDto ){
-    
-    return this.authService.login(body)
-
+  create(@Body() body: LoginDto) {
+    return this.authService.login(body);
   }
   @Post('register')
-  register(@Body() body: RegisterDto){
-    return this.authService.register(body)
+  register(@Body() body: RegisterDto) {
+    return this.authService.register(body);
   }
-
 
   // @Post()
   // create(@Body() createAuthDto: CreateAuthDto) {

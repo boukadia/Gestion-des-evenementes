@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Put,
+  Req,
+} from '@nestjs/common';
 import { EvenementesService } from './evenementes.service';
 import { CreateEvenementeDto } from './dto/create-evenemente.dto';
 import { UpdateEvenementeDto } from './dto/update-evenemente.dto';
@@ -28,11 +39,14 @@ export class EvenementesController {
   findPublished() {
     return this.evenementesService.findPublished();
   }
-  
+
   @Patch(':id/status')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  changeStatus(@Param('id') id: number, @Body() changeStatusDto:ChangeStatusDto) {
+  changeStatus(
+    @Param('id') id: number,
+    @Body() changeStatusDto: ChangeStatusDto,
+  ) {
     return this.evenementesService.changeStatus(+id, changeStatusDto);
   }
 
@@ -44,7 +58,10 @@ export class EvenementesController {
   @Put(':id')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  update(@Param('id') id: number, @Body() updateEvenementeDto: UpdateEvenementeDto) {
+  update(
+    @Param('id') id: number,
+    @Body() updateEvenementeDto: UpdateEvenementeDto,
+  ) {
     return this.evenementesService.update(+id, updateEvenementeDto);
   }
 

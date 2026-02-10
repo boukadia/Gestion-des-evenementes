@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
@@ -12,8 +23,9 @@ import * as path from 'path';
 @Controller('tickets')
 @UseGuards(JwtGuard)
 export class TicketsController {
-  constructor(private readonly ticketsService: TicketsService,
-    private readonly reservationsService: TicketsService
+  constructor(
+    private readonly ticketsService: TicketsService,
+    private readonly reservationsService: TicketsService,
   ) {}
 
   // @Post()
@@ -21,7 +33,7 @@ export class TicketsController {
   //   return this.ticketsService.create(createTicketDto);
   // }
   @Get('my')
-  findMyTickets(@Req() req:any) {
+  findMyTickets(@Req() req: any) {
     return this.ticketsService.findMyTickets(req.user);
   }
 
@@ -31,33 +43,38 @@ export class TicketsController {
   findAll() {
     return this.ticketsService.findAll();
   }
-  
-
 
   @Get(':id')
-  findOne(@Param('id') id: string,@Req() req:any) {
-    return this.ticketsService.findOne(+id,req.user);
+  findOne(@Param('id') id: string, @Req() req: any) {
+    return this.ticketsService.findOne(+id, req.user);
   }
 
   @Get(':id/download')
   async downloadTicket(
     @Param('id') id: string,
     @Req() req: any,
-    @Res() res: Response
+    @Res() res: Response,
   ) {
     const isAdmin = req.user.role === Role.ADMIN;
-    const pdfPath = await this.ticketsService.getTicketPdfPath(+id, req.user, isAdmin);
+    const pdfPath = await this.ticketsService.getTicketPdfPath(
+      +id,
+      req.user,
+      isAdmin,
+    );
     const fileName = `ticket-${id}.pdf`;
-    
+
     // CORS headers
-    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || 'http://localhost:3001');
+    res.setHeader(
+      'Access-Control-Allow-Origin',
+      req.headers.origin || 'http://localhost:3001',
+    );
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
-    
+
     // PDF headers
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-    
+
     res.sendFile(path.resolve(pdfPath));
   }
 
@@ -72,5 +89,4 @@ export class TicketsController {
   async remove(@Param('id') id: string) {
     return this.ticketsService.remove(+id);
   }
- 
 }

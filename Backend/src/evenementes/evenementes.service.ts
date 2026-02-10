@@ -9,16 +9,10 @@ import { ChangeStatusDto } from './dto/change-status.dto';
 
 @Injectable()
 export class EvenementesService {
-  constructor(private readonly prisma: PrismaService){}
+  constructor(private readonly prisma: PrismaService) {}
   async create(data: CreateEvenementeDto, user: User) {
-    const { 
-      title,
-      description,
-      dateTime,
-      location,
-      capacity
-    } = data;
-    
+    const { title, description, dateTime, location, capacity } = data;
+
     const evenemente = await this.prisma.event.create({
       data: {
         title,
@@ -27,16 +21,17 @@ export class EvenementesService {
         location,
         capacity,
         adminId: user.id,
-      }
+      },
     });
 
-    return plainToClass(EventResponseDto, evenemente, { excludeExtraneousValues: true });
+    return plainToClass(EventResponseDto, evenemente, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async findAll() {
-    const evenementes=await this.prisma.event.findMany();
+    const evenementes = await this.prisma.event.findMany();
     return evenementes;
-    
   }
 
   async findPublished() {
@@ -53,34 +48,35 @@ export class EvenementesService {
       data: { status: changeStatusDto.status },
     });
 
-    return plainToClass(EventResponseDto, evenemente, { excludeExtraneousValues: true });
+    return plainToClass(EventResponseDto, evenemente, {
+      excludeExtraneousValues: true,
+    });
   }
-  
 
   async findOne(id: number) {
     if (!id || isNaN(id)) {
-    throw new Error('Invalid event ID');
-  }
-    const evenement= await this.prisma.event.findUnique({
-      where: { id: id  }
+      throw new Error('Invalid event ID');
+    }
+    const evenement = await this.prisma.event.findUnique({
+      where: { id: id },
     });
     return evenement;
   }
 
   async update(id: number, data: UpdateEvenementeDto) {
-   
-    const updatedEvent= await this.prisma.event.update({
+    const updatedEvent = await this.prisma.event.update({
       where: { id: id },
-      data: data
-    })
+      data: data,
+    });
     return updatedEvent;
   }
 
   async remove(id: number) {
-    const deletedEvent= await this.prisma.event.delete({
-      where:{ id: id }
-    })
-    return plainToClass(EventResponseDto, deletedEvent, { excludeExtraneousValues: true });
-    
+    const deletedEvent = await this.prisma.event.delete({
+      where: { id: id },
+    });
+    return plainToClass(EventResponseDto, deletedEvent, {
+      excludeExtraneousValues: true,
+    });
   }
 }
