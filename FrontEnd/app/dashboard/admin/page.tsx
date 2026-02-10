@@ -4,6 +4,8 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLayout from '@/components/AdminLayout';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { getAllEvents } from '@/services/evenements/evenements.api';
+import { getAllReservations } from '@/services/reservations/reservations.api';
 import styles from './page.module.css';
 
 export default function AdminDashboardPage() {
@@ -13,19 +15,24 @@ export default function AdminDashboardPage() {
     totalUsers: 0,
     publishedEvents: 0
   });
+  const [loading, setLoading] = useState(true);
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/evenementes/stats`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+      // Fetch events and reservations using service functions
+      const events = await getAllEvents();
+      const reservations = await getAllReservations();
+      
+      setStats({
+        totalEvents: events.length,
+        totalReservations: reservations.length,
+        totalUsers: new Set(reservations.map((r) => r.userId)).size,
+        publishedEvents: events.filter((e) => e.status === 'PUBLISHED').length
       });
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data);
-      }
     } catch (error) {
       console.error('Error fetching stats:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
