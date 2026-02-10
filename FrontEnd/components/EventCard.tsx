@@ -19,11 +19,9 @@ export default function EventCard({ event }: EventCardProps) {
         <hr />
         <div className="d-flex justify-content-between text-muted small">
           <div>
-            <span className="me-1">📅</span>
             {new Date(event.dateTime).toLocaleDateString('fr-FR')}
           </div>
           <div>
-            <span className="me-1">📍</span>
             {event.location.length > 15
               ? `${event.location.substring(0, 15)}...`
               : event.location}

@@ -28,7 +28,7 @@ export default function MyTicketsPage() {
     const result = await downloadTicket(ticketId);
     
     if (result.success) {
-      setToast({ message: 'Ticket downloaded successfully! ✅', type: 'success' });
+      setToast({ message: 'Ticket downloaded successfully!', type: 'success' });
     } else {
       setToast({ message: result.error || 'Failed to download ticket', type: 'error' });
     }
@@ -53,21 +53,19 @@ export default function MyTicketsPage() {
       <ParticipantLayout>
         <div className={styles.pageContainer}>
           <div className={styles.header}>
-            <h1 className={styles.pageTitle}>🎫 My Tickets</h1>
+            <h1 className={styles.pageTitle}>My Tickets</h1>
             <p className={styles.pageSubtitle}>Download and manage your event tickets</p>
           </div>
 
           {/* Stats */}
           <div className={styles.statsRow}>
             <div className={styles.statCard}>
-              <span className={styles.statIcon}>🎫</span>
               <div className={styles.statInfo}>
                 <span className={styles.statNumber}>{tickets.length}</span>
                 <span className={styles.statLabel}>Total Tickets</span>
               </div>
             </div>
             <div className={styles.statCard}>
-              <span className={styles.statIcon}>✅</span>
               <div className={styles.statInfo}>
                 <span className={styles.statNumber}>
                   {tickets.filter(t => t.reservation?.status === 'CONFIRMED').length}
@@ -76,7 +74,6 @@ export default function MyTicketsPage() {
               </div>
             </div>
             <div className={styles.statCard}>
-              <span className={styles.statIcon}>📅</span>
               <div className={styles.statInfo}>
                 <span className={styles.statNumber}>
                   {tickets.filter(t => {
@@ -92,7 +89,6 @@ export default function MyTicketsPage() {
           {/* Tickets List */}
           {tickets.length === 0 ? (
             <div className={styles.noTickets}>
-              <div className={styles.noTicketsIcon}>🎫</div>
               <h3>No tickets found</h3>
               <p>You don't have any tickets yet. Book an event to get your first ticket!</p>
             </div>
@@ -108,7 +104,7 @@ export default function MyTicketsPage() {
                     <span className={`${styles.statusBadge} ${
                       ticket.reservation?.status === 'CONFIRMED' ? styles.statusConfirmed : styles.statusPending
                     }`}>
-                      {ticket.reservation?.status === 'CONFIRMED' ? '✅ Confirmed' : '⏳ Pending'}
+                      {ticket.reservation?.status === 'CONFIRMED' ? 'Confirmed' : 'Pending'}
                     </span>
                   </div>
 
@@ -117,7 +113,6 @@ export default function MyTicketsPage() {
                     
                     <div className={styles.eventDetails}>
                       <div className={styles.detailItem}>
-                        <span className={styles.detailIcon}>📅</span>
                         <span>{ticket.event?.dateTime ? new Date(ticket.event.dateTime).toLocaleDateString('en-US', {
                           weekday: 'long',
                           year: 'numeric',
@@ -129,12 +124,10 @@ export default function MyTicketsPage() {
                       </div>
                       
                       <div className={styles.detailItem}>
-                        <span className={styles.detailIcon}>📍</span>
                         <span>{ticket.event?.location || 'Location not specified'}</span>
                       </div>
 
                       <div className={styles.detailItem}>
-                        <span className={styles.detailIcon}>🕐</span>
                         <span>Issued: {new Date(ticket.createdAt).toLocaleDateString()}</span>
                       </div>
                     </div>
@@ -145,7 +138,7 @@ export default function MyTicketsPage() {
                       onClick={() => handleDownload(ticket.id)}
                       className={styles.downloadButton}
                     >
-                      📥 Download PDF
+                      Download PDF
                     </button>
                     
                     {ticket.pdfUrl && (

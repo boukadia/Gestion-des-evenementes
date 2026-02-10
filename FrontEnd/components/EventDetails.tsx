@@ -27,7 +27,7 @@ export default function EventDetails({
       <div className="card-body">
         <div className="row mb-4">
           <div className="col-md-6">
-            <h6 className="text-primary">📅 Date & Time</h6>
+            <h6 className="text-primary">Date & Time</h6>
             <p className="mb-3">
               {new Date(event.dateTime).toLocaleDateString('fr-FR', {
                 weekday: 'long',
@@ -41,25 +41,25 @@ export default function EventDetails({
           </div>
           
           <div className="col-md-6">
-            <h6 className="text-primary">📍 Location</h6>
+            <h6 className="text-primary">Location</h6>
             <p className="mb-3">{event.location}</p>
           </div>
         </div>
 
         <div className="row mb-4">
           <div className="col-md-6">
-            <h6 className="text-primary">👥 Capacity</h6>
+            <h6 className="text-primary">Capacity</h6>
             <p className="mb-3">{event.capacity} places</p>
           </div>
           
           <div className="col-md-6">
-            <h6 className="text-primary">📋 Organizer</h6>
+            <h6 className="text-primary">Organizer</h6>
             <p className="mb-3">{event.admin?.name || 'N/A'}</p>
           </div>
         </div>
 
         <div className="mb-4">
-          <h6 className="text-primary">📝 Description</h6>
+          <h6 className="text-primary">Description</h6>
           <p className="text-muted">{event.description}</p>
         </div>
 

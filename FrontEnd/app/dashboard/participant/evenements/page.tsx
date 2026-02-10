@@ -41,7 +41,7 @@ export default function ParticipantEvenementsPage() {
     const result = await createReservation(eventId);
     
     if (result.success) {
-      setToast({ message: 'Reservation submitted successfully! ✅', type: 'success' });
+      setToast({ message: 'Reservation submitted successfully!', type: 'success' });
     } else {
       setToast({ message: result.error || 'Failed to create reservation', type: 'error' });
     }
@@ -70,7 +70,7 @@ export default function ParticipantEvenementsPage() {
       <ParticipantLayout>
         <div className={styles.pageContainer}>
           <div className={styles.header}>
-            <h1 className={styles.pageTitle}>🎪 Available Events</h1>
+            <h1 className={styles.pageTitle}>Available Events</h1>
             <p className={styles.pageSubtitle}>Discover and book amazing events happening near you</p>
           </div>
 
@@ -83,13 +83,11 @@ export default function ParticipantEvenementsPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className={styles.searchInput}
               />
-              <span className={styles.searchIcon}>🔍</span>
             </div>
           </div>
 
           {filteredEvents.length === 0 ? (
             <div className={styles.noEvents}>
-              <div className={styles.noEventsIcon}>🎭</div>
               <h3>No events found</h3>
               <p>Try adjusting your search criteria or check back later for new events.</p>
             </div>
@@ -100,13 +98,12 @@ export default function ParticipantEvenementsPage() {
                   <div className={styles.eventHeader}>
                     <h3 className={styles.eventTitle}>{event.title}</h3>
                     <span className={styles.eventStatus}>
-                      {event.status === 'PUBLISHED' ? '🟢 Available' : '🔴 Not Available'}
+                      {event.status === 'PUBLISHED' ? 'Available' : 'Not Available'}
                     </span>
                   </div>
                   
                   <div className={styles.eventDetails}>
                     <div className={styles.eventInfo}>
-                      <span className={styles.eventInfoIcon}>📅</span>
                       <span>{new Date(event.dateTime).toLocaleDateString('en-US', {
                         weekday: 'long',
                         year: 'numeric',
@@ -118,12 +115,10 @@ export default function ParticipantEvenementsPage() {
                     </div>
                     
                     <div className={styles.eventInfo}>
-                      <span className={styles.eventInfoIcon}>📍</span>
                       <span>{event.location}</span>
                     </div>
                     
                     <div className={styles.eventInfo}>
-                      <span className={styles.eventInfoIcon}>👥</span>
                       <span>Capacity: {event.capacity} people</span>
                     </div>
                   </div>
@@ -138,7 +133,7 @@ export default function ParticipantEvenementsPage() {
                       className={styles.reserveButton}
                       disabled={event.status !== 'PUBLISHED'}
                     >
-                      {event.status === 'PUBLISHED' ? 'Reserve Now 🎫' : 'Not Available'}
+                      {event.status === 'PUBLISHED' ? 'Reserve Now' : 'Not Available'}
                     </button>
                   </div>
                 </div>

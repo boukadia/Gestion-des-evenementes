@@ -110,13 +110,13 @@ export default function AdminReservationsPage() {
                             onClick={() => updateReservationStatus(reservation.id, 'CONFIRMED')}
                             className="btn btn-sm btn-success"
                           >
-                            ✅ Confirm
+                            Confirm
                           </button>
                           <button
                             onClick={() => updateReservationStatus(reservation.id, 'CANCELED')}
                             className="btn btn-sm btn-danger"
                           >
-                            ❌ Cancel
+                            Cancel
                           </button>
                         </div>
                       )}

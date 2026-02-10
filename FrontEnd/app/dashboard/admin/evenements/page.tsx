@@ -69,7 +69,7 @@ export default function AdminEventsPage() {
           <div className={styles.header}>
             <h1 className={styles.pageTitle}>Events Management</h1>
             <Link href="/dashboard/admin/evenements/create" className={`btn btn-primary ${styles.createButton}`}>
-              ➕ Create New Event
+              Create New Event
             </Link>
           </div>
 
@@ -140,13 +140,13 @@ export default function AdminEventsPage() {
                           href={`/dashboard/admin/evenements/${event.id}`}
                           className="btn btn-sm btn-outline-primary"
                         >
-                          ✏️ Edit
+                          Edit
                         </Link>
                         <button
                           onClick={() => handleDeleteClick(event.id)}
                           className="btn btn-sm btn-outline-danger"
                         >
-                          🗑️ Delete
+                          Delete
                         </button>
                       </div>
                     </td>

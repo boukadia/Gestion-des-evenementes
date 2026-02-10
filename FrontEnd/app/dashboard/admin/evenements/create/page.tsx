@@ -149,7 +149,7 @@ export default function CreateEventPage() {
                 disabled={loading}
                 style={{ padding: '0.75rem 2rem' }}
               >
-                {loading ? 'Creating...' : '✅ Create Event'}
+                {loading ? 'Creating...' : 'Create Event'}
               </button>
               <button
                 type="button"
@@ -157,7 +157,7 @@ export default function CreateEventPage() {
                 onClick={() => router.back()}
                 style={{ padding: '0.75rem 2rem' }}
               >
-                ❌ Cancel
+                Cancel
               </button>
             </div>
           </form>

@@ -62,7 +62,7 @@ export default function EventsPage() {
         {/* Search Section */}
         <div className={styles.searchSection}>
           <div className={styles.searchBox}>
-            <span className={styles.searchIcon}>🔍</span>
+
             <input
               type="text"
               placeholder="Search events by title, location, or description..."
@@ -99,9 +99,6 @@ export default function EventsPage() {
           </div>
         ) : filteredEvents.length === 0 ? (
           <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}>
-              {searchTerm ? '🔍' : '📅'}
-            </div>
             <h3 className={styles.emptyTitle}>
               {searchTerm ? 'No events found' : 'No events available'}
             </h3>

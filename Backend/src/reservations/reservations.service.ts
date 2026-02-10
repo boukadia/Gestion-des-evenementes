@@ -190,6 +190,9 @@ async findOne(id: number) {
     if(reservation.status==="CANCELED"){
       throw new BadRequestException('Reservation already canceled');
     }
+    if(reservation.status==="CONFIRMED"){
+      throw new BadRequestException('Cannot cancel a confirmed reservation');
+    }
     const resrvationDeleted=await this.prisma.reservation.update({
       where:{id},
       data:{status:"CANCELED"}

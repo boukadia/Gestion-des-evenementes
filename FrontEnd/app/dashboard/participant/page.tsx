@@ -15,7 +15,7 @@ export default function ParticipantDashboard() {
         <div className={styles.welcomeContainer}>
           <div className={styles.welcomeHeader}>
             <h1 className={styles.welcomeTitle}>
-              Welcome to GestEvent! 🎉
+              Welcome to GestEvent!
             </h1>
             <p className={styles.welcomeSubtitle}>
               Hi <strong>{user?.name}</strong>, discover amazing events and create unforgettable memories
@@ -26,19 +26,16 @@ export default function ParticipantDashboard() {
             <h2 className={styles.sectionTitle}>Quick Actions</h2>
             <div className={styles.actionGrid}>
               <Link href="/dashboard/participant/evenements" className={styles.actionCard}>
-                <div className={styles.actionIcon}>🎪</div>
                 <h3>Browse Events</h3>
                 <p>Discover upcoming events and book your spot</p>
               </Link>
 
               <Link href="/dashboard/participant/my-reservations" className={styles.actionCard}>
-                <div className={styles.actionIcon}>📅</div>
                 <h3>My Reservations</h3>
                 <p>View and manage your event reservations</p>
               </Link>
 
               <Link href="/dashboard/participant/my-tickets" className={styles.actionCard}>
-                <div className={styles.actionIcon}>🎫</div>
                 <h3>My Tickets</h3>
                 <p>Download and view your event tickets</p>
               </Link>
@@ -49,7 +46,6 @@ export default function ParticipantDashboard() {
             <h2 className={styles.sectionTitle}>Your Activity</h2>
             <div className={styles.statsGrid}>
               <div className={styles.statCard}>
-                <div className={styles.statIcon}>🎪</div>
                 <div className={styles.statInfo}>
                   <div className={styles.statNumber}>0</div>
                   <div className={styles.statLabel}>Events Attended</div>
@@ -57,7 +53,6 @@ export default function ParticipantDashboard() {
               </div>
 
               <div className={styles.statCard}>
-                <div className={styles.statIcon}>📅</div>
                 <div className={styles.statInfo}>
                   <div className={styles.statNumber}>0</div>
                   <div className={styles.statLabel}>Active Reservations</div>
@@ -65,7 +60,6 @@ export default function ParticipantDashboard() {
               </div>
 
               <div className={styles.statCard}>
-                <div className={styles.statIcon}>⭐</div>
                 <div className={styles.statInfo}>
                   <div className={styles.statNumber}>0</div>
                   <div className={styles.statLabel}>Reviews Given</div>

@@ -214,7 +214,7 @@ export default function EditEventPage() {
                 disabled={saving}
                 style={{ padding: '0.75rem 2rem' }}
               >
-                {saving ? 'Saving...' : '✅ Save Changes'}
+                {saving ? 'Saving...' : 'Save Changes'}
               </button>
               <button
                 type="button"
@@ -222,7 +222,7 @@ export default function EditEventPage() {
                 onClick={() => router.back()}
                 style={{ padding: '0.75rem 2rem' }}
               >
-                ❌ Cancel
+                Cancel
               </button>
             </div>
           </form>

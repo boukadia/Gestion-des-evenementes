@@ -20,6 +20,7 @@ export default function ParticipantLayout({ children }: ParticipantLayoutProps) 
   };
 
   const navigationItems = [
+    { href: '/dashboard/participant', label: 'Dashboard' },
     { href: '/dashboard/participant/evenements', label: 'Events Available' },
     { href: '/dashboard/participant/my-reservations', label: 'My Reservations' },
     { href: '/dashboard/participant/my-tickets', label: 'My Tickets' },
@@ -40,7 +41,6 @@ export default function ParticipantLayout({ children }: ParticipantLayoutProps) 
               href={item.href}
               className={`${styles.navLink} ${pathname === item.href ? styles.active : ''}`}
             >
-              <span className={styles.navIcon}>{item.icon}</span>
               <span className={styles.navLabel}>{item.label}</span>
             </Link>
           ))}
