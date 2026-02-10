@@ -38,6 +38,24 @@ export const getTicketById = async (ticketId: number): Promise<Ticket | null> =>
   }
 };
 
+// Get my tickets (for participants)
+export const getMyTickets = async (): Promise<Ticket[]> => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/tickets/my`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) throw new Error('Failed to fetch my tickets');
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching my tickets:', error);
+    return [];
+  }
+};
+
 // Download ticket PDF
 export const downloadTicket = async (ticketId: number): Promise<{ success: boolean; error?: string }> => {
   try {

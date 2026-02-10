@@ -5,6 +5,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { Event } from '@/types/event';
 import { getPublishedEvents } from '@/services/evenements/evenements.api';
 import { createReservation } from '@/services/reservations/reservations.api';
+import Toast, { ToastType } from '@/components/Toast';
 import styles from './page.module.css';
 import ParticipantLayout from '@/components/ParticipantLayout';
 
@@ -13,6 +14,7 @@ export default function ParticipantEvenementsPage() {
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
 
   const fetchEvents = async () => {
     try {
@@ -39,9 +41,9 @@ export default function ParticipantEvenementsPage() {
     const result = await createReservation(eventId);
     
     if (result.success) {
-      alert('Reservation submitted successfully! ✅');
+      setToast({ message: 'Reservation submitted successfully! ✅', type: 'success' });
     } else {
-      alert(`Error: ${result.error}`);
+      setToast({ message: result.error || 'Failed to create reservation', type: 'error' });
     }
   };
 
@@ -145,6 +147,7 @@ export default function ParticipantEvenementsPage() {
           )}
         </div>
       </ParticipantLayout>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </ProtectedRoute>
   );
 }

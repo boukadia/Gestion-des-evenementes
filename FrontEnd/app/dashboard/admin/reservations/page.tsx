@@ -5,11 +5,13 @@ import AdminLayout from '@/components/AdminLayout';
 import { Reservation } from '@/types/reservation';
 import { getAllReservations, updateReservationStatus as updateStatus } from '@/services/reservations/reservations.api';
 import { useEffect, useState } from 'react';
+import Toast, { ToastType } from '@/components/Toast';
 import styles from './page.module.css';
 
 export default function AdminReservationsPage() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
 
   useEffect(() => {
     fetchReservations();
@@ -35,9 +37,9 @@ export default function AdminReservationsPage() {
       setReservations(reservations.map(res => 
         res.id === id ? { ...res, status } : res
       ));
-      alert('Reservation status updated!');
+      setToast({ message: 'Reservation status updated!', type: 'success' });
     } else {
-      alert(result.error || 'Error updating reservation');
+      setToast({ message: result.error || 'Error updating reservation', type: 'error' });
     }
   };
 
@@ -127,6 +129,7 @@ export default function AdminReservationsPage() {
         )}
         </div>
       </AdminLayout>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </ProtectedRoute>
   );
 }

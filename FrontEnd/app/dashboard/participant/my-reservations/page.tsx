@@ -5,6 +5,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import ParticipantLayout from '@/components/ParticipantLayout';
 import { Reservation } from '@/types/reservation';
 import { getMyReservations, cancelMyReservation } from '@/services/reservations/reservations.api';
+import Toast, { ToastType } from '@/components/Toast';
 import styles from './page.module.css';
 
 export default function MyReservationsPage() {
@@ -12,6 +13,7 @@ export default function MyReservationsPage() {
   const [filteredReservations, setFilteredReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
 
   const fetchReservations = async () => {
     try {
@@ -43,13 +45,13 @@ export default function MyReservationsPage() {
     const result = await cancelMyReservation(reservationId);
 
     if (result.success) {
-      alert('Reservation cancelled successfully! ✅');
+      setToast({ message: 'Reservation cancelled successfully! ✅', type: 'success' });
       // Update local state
       setReservations(reservations.map(res =>
         res.id === reservationId ? { ...res, status: 'CANCELED' as const } : res
       ));
     } else {
-      alert(`Error: ${result.error}`);
+      setToast({ message: result.error || 'Failed to cancel reservation', type: 'error' });
     }
   };
 
@@ -207,6 +209,7 @@ export default function MyReservationsPage() {
           )}
         </div>
       </ParticipantLayout>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </ProtectedRoute>
   );
 }

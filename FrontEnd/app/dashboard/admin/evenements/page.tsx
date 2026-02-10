@@ -5,12 +5,14 @@ import AdminLayout from '@/components/AdminLayout';
 import { Event } from '@/types/event';
 import { getAllEvents, updateEventStatus, deleteEvent } from '@/services/evenements/evenements.api';
 import { useEffect, useState } from 'react';
+import Toast, { ToastType } from '@/components/Toast';
 import Link from 'next/link';
 import styles from './page.module.css';
 
 export default function AdminEventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
 
   useEffect(() => {
     fetchEvents();
@@ -27,16 +29,16 @@ export default function AdminEventsPage() {
     }
   };
 
-  const handleStatusChange = async (eventId: number, newStatus: 'DRAFT' | 'PUBLISHED' | 'CANCELED') => {
+  const handleStatusChange = async (eventId: number, newStatus: 'DRAFT' | 'PUBLISHED' | 'CANCELLED') => {
     const result = await updateEventStatus(eventId, newStatus);
     
     if (result.success) {
       setEvents(events.map(event => 
         event.id === eventId ? { ...event, status: newStatus } : event
       ));
-      alert('Status updated successfully!');
+      setToast({ message: 'Status updated successfully!', type: 'success' });
     } else {
-      alert(result.error || 'Failed to update status');
+      setToast({ message: result.error || 'Failed to update status', type: 'error' });
     }
   };
 
@@ -47,9 +49,9 @@ export default function AdminEventsPage() {
     
     if (result.success) {
       setEvents(events.filter(event => event.id !== id));
-      alert('Event deleted successfully!');
+      setToast({ message: 'Event deleted successfully!', type: 'success' });
     } else {
-      alert(result.error || 'Failed to delete event');
+      setToast({ message: result.error || 'Failed to delete event', type: 'error' });
     }
   };
 
@@ -111,16 +113,16 @@ export default function AdminEventsPage() {
                       <select
                         className={`form-select form-select-sm ${styles.statusSelect}`}
                         value={event.status}
-                        onChange={(e) => handleStatusChange(event.id, e.target.value as 'DRAFT' | 'PUBLISHED' | 'CANCELED')}
+                        onChange={(e) => handleStatusChange(event.id, e.target.value as 'DRAFT' | 'PUBLISHED' | 'CANCELLED')}
                         style={{
                           maxWidth: '150px',
                           backgroundColor: 
                             event.status === 'PUBLISHED' ? '#d4edda' : 
-                            event.status === 'CANCELED' ? '#f8d7da' : 
+                            event.status === 'CANCELLED' ? '#f8d7da' : 
                             '#fff3cd',
                           color: 
                             event.status === 'PUBLISHED' ? '#155724' : 
-                            event.status === 'CANCELED' ? '#721c24' : 
+                            event.status === 'CANCELLED' ? '#721c24' : 
                             '#856404',
                           fontWeight: 'bold',
                           border: '1px solid rgba(0,0,0,0.1)'
@@ -155,6 +157,7 @@ export default function AdminEventsPage() {
         )}
         </div>
       </AdminLayout>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </ProtectedRoute>
   );
 }

@@ -30,7 +30,7 @@ export const createReservation = async (eventId: number): Promise<{ success: boo
     return { success: true, reservation };
   } catch (error: unknown) {
     console.error('Error creating reservation:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    return { success: false, error: error instanceof Error ? error.message : 'Network error' };
   }
 };
 
@@ -89,15 +89,12 @@ export const updateReservationStatus = async (
     
 
      if (!response.ok) {
-      // جلب رسالة الخطأ من Backend
       let errorMessage = `HTTP Error: ${response.status}`;
       
       try {
         const errorData = await response.json();
-        // رسالة الخطأ من Backend
         errorMessage = errorData.message || errorData.error || errorMessage;
       } catch (parseError) {
-        // إذا لم يستطع parse JSON، استخدم status text
         errorMessage = response.statusText || errorMessage;
       }
       
@@ -107,7 +104,7 @@ export const updateReservationStatus = async (
     return { success: true };
   } catch (error: unknown) {
     console.error('Error updating reservation status:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    return { success: false, error: error instanceof Error ? error.message : 'Network error' };
   }
 };
 // Cancel my reservation (for participants)
@@ -135,6 +132,6 @@ export const cancelMyReservation = async (reservationId: number): Promise<{ succ
     return { success: true };
   } catch (error: unknown) {
     console.error('Error canceling reservation:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    return { success: false, error: error instanceof Error ? error.message : 'Network error' };
   }
 };

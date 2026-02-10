@@ -5,11 +5,13 @@ import AdminLayout from '@/components/AdminLayout';
 import { getEventById, updateEvent } from '@/services/evenements/evenements.api';
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import Toast, { ToastType } from '@/components/Toast';
 
 export default function EditEventPage() {
   const router = useRouter();
   const params = useParams();
   const eventId = parseInt(params.id as string);
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
   
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -27,8 +29,8 @@ export default function EditEventPage() {
       const data = await getEventById(eventId);
       
       if (!data) {
-        alert('Event not found');
-        router.push('/dashboard/admin/evenements');
+        setToast({ message: 'Event not found', type: 'error' });
+        setTimeout(() => router.push('/dashboard/admin/evenements'), 1500);
         return;
       }
       
@@ -48,7 +50,7 @@ export default function EditEventPage() {
       });
     } catch (error) {
       console.error('Error fetching event:', error);
-      alert('Error loading event');
+      setToast({ message: 'Error loading event', type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -81,14 +83,14 @@ export default function EditEventPage() {
       });
 
       if (result.success) {
-        alert('Event updated successfully!');
-        router.push('/dashboard/admin/evenements');
+        setToast({ message: 'Event updated successfully!', type: 'success' });
+        setTimeout(() => router.push('/dashboard/admin/evenements'), 1500);
       } else {
-        alert(`Failed to update event: ${result.error}`);
+        setToast({ message: result.error || 'Failed to update event', type: 'error' });
       }
     } catch (error) {
       console.error('Error updating event:', error);
-      alert('Error updating event');
+      setToast({ message: 'Error updating event', type: 'error' });
     } finally {
       setSaving(false);
     }
@@ -227,6 +229,7 @@ export default function EditEventPage() {
         </div>
         </div>
       </AdminLayout>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </ProtectedRoute>
   );
 }

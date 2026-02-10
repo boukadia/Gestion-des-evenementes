@@ -43,6 +43,18 @@ export class ReservationsService {
     if(existingReservation){
       throw new BadRequestException('You have already reserved a spot for this event');
     }
+
+    const canceledReservation = await this.prisma.reservation.findFirst({
+      where: {
+        eventId: data.eventId,
+        userId: user.id,
+        status: 'CANCELED'
+      }
+    });
+
+    if (canceledReservation) {
+      throw new BadRequestException('You have already reserved and canceled this event. Cannot reserve again.');
+    }
     const reservation=await this.prisma.reservation.create({
       data:{
         eventId:data.eventId,
@@ -67,7 +79,8 @@ export class ReservationsService {
   async findMyReservations(userId: number) {
     const reservations = await this.prisma.reservation.findMany({
       where: { userId },
-      include: { event: true },
+           include:{event:true,user:true,ticket:true},
+
       orderBy: { createdAt: 'desc' }
     });
     return reservations;
@@ -77,7 +90,8 @@ export class ReservationsService {
 async findOne(id: number) {
   const reservation = await this.prisma.reservation.findUnique({
     where: { id },
-    include: { event: true, user: true },
+         include:{event:true,user:true,ticket:true},
+
   });
 
   if (!reservation) {
@@ -94,7 +108,8 @@ async findOne(id: number) {
   }
     const reservation = await this.prisma.reservation.findUnique({
       where: { id },
-      include: { event: true },
+           include:{event:true,user:true,ticket:true},
+
     });
 
     if (!reservation) {
@@ -107,7 +122,7 @@ async findOne(id: number) {
   if (reservation.status === 'CANCELED' && data.status === 'CONFIRMED') {
     throw new BadRequestException('Cannot confirm a canceled reservation');
   }
-  
+
   if (reservation.status === "CONFIRMED") {
   throw new BadRequestException('Cannot cancel a confirmed reservation');
 }
