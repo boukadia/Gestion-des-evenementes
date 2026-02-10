@@ -40,7 +40,6 @@ export default function HomeClient({ initialEvents }: { initialEvents: Event[] }
           {events.length === 0 ? (
             <div className="text-center py-5">
               <div className="text-muted">
-                <div className="fs-1 mb-3">📅</div>
                 <p className="fs-5">No events available at the moment.</p>
               </div>
             </div>

@@ -22,7 +22,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Logo Section */}
         <div className={styles.logoSection}>
           <h3 className={styles.logoTitle}>
-            <span className={styles.logoIcon}>🎉</span>
             GestEvent
           </h3>
           <p className={styles.logoSubtitle}>
@@ -38,7 +37,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 href="/dashboard/admin"
                 className={`${styles.navLink} ${pathname === '/dashboard/admin' ? styles.active : ''}`}
               >
-                <span className={styles.navIcon}>📊</span>
                 Dashboard
               </Link>
             </li>
@@ -47,7 +45,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 href="/dashboard/admin/evenements"
                 className={`${styles.navLink} ${isActive('/dashboard/admin/evenements') ? styles.active : ''}`}
               >
-                <span className={styles.navIcon}>🎫</span>
                 Events
               </Link>
             </li>
@@ -56,7 +53,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 href="/dashboard/admin/reservations"
                 className={`${styles.navLink} ${isActive('/dashboard/admin/reservations') ? styles.active : ''}`}
               >
-                <span className={styles.navIcon}>📝</span>
                 Reservations
               </Link>
             </li>
@@ -65,7 +61,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 href="/dashboard/admin/tickets"
                 className={`${styles.navLink} ${isActive('/dashboard/admin/tickets') ? styles.active : ''}`}
               >
-                <span className={styles.navIcon}>🎟️</span>
                 Tickets
               </Link>
             </li>
@@ -75,11 +70,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Bottom Actions */}
         <div className={styles.bottomSection}>
           <Link href="/" className={styles.homeLink}>
-            <span className={styles.navIcon}>🏠</span>
             Back to Home
           </Link>
           <button onClick={logout} className={styles.logoutButton}>
-            <span className={styles.navIcon}>🚪</span>
             Logout
           </button>
         </div>

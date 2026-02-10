@@ -38,7 +38,7 @@ export default async function EventDetailsPage({ params }: PageProps) {
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
         <div className="container">
           <Link href="/" className="navbar-brand fw-bold">
-            🎉 GestEvent
+            GestEvent
           </Link>
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav ms-auto">

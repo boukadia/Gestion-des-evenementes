@@ -47,7 +47,7 @@ export default function RegisterPage() {
               <div className="card-body p-4">
                 <div className="text-center mb-4">
                   <Link href="/" className="text-decoration-none">
-                    <h2 className="text-primary fw-bold">🎉 GestEvent</h2>
+                    <h2 className="text-primary fw-bold">GestEvent</h2>
                   </Link>
                   <p className="text-muted">Create your account</p>
                 </div>

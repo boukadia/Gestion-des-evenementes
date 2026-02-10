@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import ParticipantLayout from '@/components/ParticipantLayout';
 import { Reservation } from '@/types/reservation';
@@ -10,6 +11,7 @@ import ConfirmDialog from '@/components/ConfirmDialog';
 import styles from './page.module.css';
 
 export default function MyReservationsPage() {
+  const router = useRouter();
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [filteredReservations, setFilteredReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,6 +41,10 @@ export default function MyReservationsPage() {
     setFilteredReservations(filtered);
   };
 
+  const handleViewTicket = (ticketId: number) => {
+    router.push(`/dashboard/participant/my-tickets/${ticketId}`);
+  };
+
   const handleCancelClick = (reservationId: number) => {
     setConfirmDialog({ reservationId });
   };
@@ -50,7 +56,7 @@ export default function MyReservationsPage() {
     setConfirmDialog(null);
 
     if (result.success) {
-      setToast({ message: 'Reservation cancelled successfully! ✅', type: 'success' });
+      setToast({ message: 'Reservation cancelled successfully!', type: 'success' });
       // Update local state
       setReservations(reservations.map(res =>
         res.id === confirmDialog.reservationId ? { ...res, status: 'CANCELED' as const } : res
@@ -71,13 +77,7 @@ export default function MyReservationsPage() {
   };
 
   const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'CONFIRMED': return '✅';
-      case 'PENDING': return '⏳';
-      case 'REFUSED': return '❌';
-      case 'CANCELED': return '🚫';
-      default: return '';
-    }
+    return '';
   };
 
   useEffect(() => {
@@ -103,28 +103,25 @@ export default function MyReservationsPage() {
       <ParticipantLayout>
         <div className={styles.pageContainer}>
           <div className={styles.header}>
-            <h1 className={styles.pageTitle}>📅 My Reservations</h1>
+            <h1 className={styles.pageTitle}>My Reservations</h1>
             <p className={styles.pageSubtitle}>Manage your event reservations</p>
           </div>
 
           {/* Stats */}
           <div className={styles.statsRow}>
             <div className={styles.statCard}>
-              <span className={styles.statIcon}>📅</span>
               <div className={styles.statInfo}>
                 <span className={styles.statNumber}>{reservations.length}</span>
                 <span className={styles.statLabel}>Total Reservations</span>
               </div>
             </div>
             <div className={styles.statCard}>
-              <span className={styles.statIcon}>✅</span>
               <div className={styles.statInfo}>
                 <span className={styles.statNumber}>{reservations.filter(r => r.status === 'CONFIRMED').length}</span>
                 <span className={styles.statLabel}>Confirmed</span>
               </div>
             </div>
             <div className={styles.statCard}>
-              <span className={styles.statIcon}>⏳</span>
               <div className={styles.statInfo}>
                 <span className={styles.statNumber}>{reservations.filter(r => r.status === 'PENDING').length}</span>
                 <span className={styles.statLabel}>Pending</span>
@@ -150,7 +147,6 @@ export default function MyReservationsPage() {
           {/* Reservations List */}
           {filteredReservations.length === 0 ? (
             <div className={styles.noReservations}>
-              <div className={styles.noReservationsIcon}>📅</div>
               <h3>No reservations found</h3>
               <p>You haven't made any reservations yet. Browse events to get started!</p>
             </div>
@@ -167,7 +163,6 @@ export default function MyReservationsPage() {
 
                   <div className={styles.eventDetails}>
                     <div className={styles.detailItem}>
-                      <span className={styles.detailIcon}>📅</span>
                       <span>{new Date(reservation.event.dateTime).toLocaleDateString('en-US', {
                         weekday: 'long',
                         year: 'numeric',
@@ -178,22 +173,23 @@ export default function MyReservationsPage() {
                       })}</span>
                     </div>
                     <div className={styles.detailItem}>
-                      <span className={styles.detailIcon}>📍</span>
                       <span>{reservation.event.location}</span>
                     </div>
                     <div className={styles.detailItem}>
-                      <span className={styles.detailIcon}>🕐</span>
                       <span>Reserved on: {new Date(reservation.createdAt).toLocaleDateString()}</span>
                     </div>
                   </div>
 
                   <div className={styles.cardActions}>
                     {reservation.status === 'CONFIRMED' && reservation.ticket && (
-                      <button className={styles.ticketButton}>
-                        🎫 View Ticket
+                      <button 
+                        onClick={() => handleViewTicket(reservation.ticket.id)}
+                        className={styles.ticketButton}
+                      >
+                        View Ticket
                       </button>
                     )}
-                    {(reservation.status === 'PENDING' || reservation.status === 'CONFIRMED') && (
+                    {(reservation.status === 'PENDING' ) && (
                       <button
                         onClick={() => handleCancelClick(reservation.id)}
                         className={styles.cancelButton}

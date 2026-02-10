@@ -31,7 +31,7 @@ export default function Navbar() {
             fontWeight: 'bold'
           }}
         >
-          🎉 GestEvent
+          GestEvent
         </Link>
 
         {/* Menu */}

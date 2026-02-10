@@ -108,14 +108,12 @@ export default function TicketsPage() {
           {/* Stats Cards */}
           <div className={styles.statsRow}>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>🎟️</div>
               <div className={styles.statContent}>
                 <h3 className={styles.statValue}>{totalTickets}</h3>
                 <p className={styles.statLabel}>Total Tickets</p>
               </div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>✅</div>
               <div className={styles.statContent}>
                 <h3 className={styles.statValue}>{confirmedTickets}</h3>
                 <p className={styles.statLabel}>Confirmed Tickets</p>
@@ -179,7 +177,7 @@ export default function TicketsPage() {
                       </td>
                       <td className={styles.tableCell}>
                         <div className={styles.eventInfo}>{ticket.event?.title}</div>
-                        <div className={styles.eventLocation}>📍 {ticket.event?.location}</div>
+                        <div className={styles.eventLocation}>{ticket.event?.location}</div>
                       </td>
                       <td className={styles.tableCell}>
                         <div className={styles.userInfo}>{ticket.user?.name}</div>
@@ -203,14 +201,14 @@ export default function TicketsPage() {
                             className={`btn btn-sm btn-outline-primary ${styles.downloadButton}`}
                             title="Download PDF"
                           >
-                            📥 Download
+                            Download
                           </button>
                           <button
                             onClick={() => handleDeleteClick(ticket.id)}
                             className={`btn btn-sm btn-outline-danger ${styles.deleteButton}`}
                             title="Delete Ticket"
                           >
-                            🗑️ Delete
+                            Delete
                           </button>
                         </div>
                       </td>

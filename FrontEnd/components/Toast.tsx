@@ -12,7 +12,7 @@ interface ToastProps {
   duration?: number;
 }
 
-export default function Toast({ message, type, onClose, duration = 5000 }: ToastProps) {
+export default function Toast({ message, type, onClose, duration = 1000 }: ToastProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
@@ -22,13 +22,7 @@ export default function Toast({ message, type, onClose, duration = 5000 }: Toast
   }, [duration, onClose]);
 
   const getIcon = () => {
-    switch (type) {
-      case 'success': return '✅';
-      case 'error': return '❌';
-      case 'warning': return '⚠️';
-      case 'info': return 'ℹ️';
-      default: return '';
-    }
+    return '';
   };
 
   return (

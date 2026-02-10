@@ -42,7 +42,6 @@ export default function AdminDashboardPage() {
           {/* Stats Cards */}
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>📊</div>
               <h3 className={`${styles.statValue} ${styles.blue}`}>
                 {stats.totalEvents}
               </h3>
@@ -50,7 +49,6 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>📝</div>
               <h3 className={`${styles.statValue} ${styles.green}`}>
                 {stats.totalReservations}
               </h3>
@@ -58,7 +56,6 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>👥</div>
               <h3 className={`${styles.statValue} ${styles.red}`}>
                 {stats.totalUsers}
               </h3>
@@ -66,7 +63,6 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>✅</div>
               <h3 className={`${styles.statValue} ${styles.orange}`}>
                 {stats.publishedEvents}
               </h3>
@@ -79,13 +75,13 @@ export default function AdminDashboardPage() {
             <h3 className={styles.quickActionsTitle}>Quick Actions</h3>
             <div className={styles.quickActionsButtons}>
               <Link href="/dashboard/admin/evenements/create" className="btn btn-primary">
-                ➕ Create New Event
+                Create New Event
               </Link>
               <Link href="/dashboard/admin/evenements" className="btn btn-outline-primary">
-                📋 View All Events
+                View All Events
               </Link>
               <Link href="/dashboard/admin/reservations" className="btn btn-outline-success">
-                📊 View Reservations
+                View Reservations
               </Link>
             </div>
           </div>
