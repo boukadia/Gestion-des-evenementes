@@ -62,7 +62,7 @@ export class EvenementesService {
     throw new Error('Invalid event ID');
   }
     const evenement= await this.prisma.event.findUnique({
-      where: { id: id }
+      where: { id: id  }
     });
     return evenement;
   }
