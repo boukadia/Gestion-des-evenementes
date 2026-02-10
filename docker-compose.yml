@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:0000@postgres:5432/gesEvent?schema=public"
+      JWT_SECRET: "aabcf9a29f15d0aaaa23dc6a94fa717aadcccc7fc3f3fe491ec61cc9b4216967"
+      PORT: 3000
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - gestevent
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./FrontEnd
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      NEXT_PUBLIC_API_URL: "http://backend:3000"
+    depends_on:
+      - backend
+    networks:
+      - gestevent
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: gesEvent
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 0000
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - gestevent
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  gestevent:
+    driver: bridge

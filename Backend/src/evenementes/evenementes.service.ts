@@ -58,6 +58,9 @@ export class EvenementesService {
   
 
   async findOne(id: number) {
+    if (!id || isNaN(id)) {
+    throw new Error('Invalid event ID');
+  }
     const evenement= await this.prisma.event.findUnique({
       where: { id: id }
     });

@@ -44,7 +44,7 @@ export class TicketsService {
 
   async findOne(id: number, user: User, isAdmin = false) {
     const ticket = await this.prisma.ticket.findUnique({
-      where: { id },
+      where: { id: id },
       include: {
         event: true,
         reservation: true,
@@ -197,7 +197,7 @@ export class TicketsService {
 
   async remove(id: number) {
     const ticket = await this.prisma.ticket.findUnique({
-      where: { id }
+      where: { id: id }
     });
 
     if (!ticket) {
@@ -211,7 +211,7 @@ export class TicketsService {
 
     // Delete ticket from database
     await this.prisma.ticket.delete({
-      where: { id }
+      where: { id: id }
     });
 
     return { message: 'Ticket deleted successfully' };

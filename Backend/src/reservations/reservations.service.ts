@@ -78,7 +78,7 @@ export class ReservationsService {
   }
   async findMyReservations(userId: number) {
     const reservations = await this.prisma.reservation.findMany({
-      where: { userId },
+      where: { userId: userId },
            include:{event:true,user:true,ticket:true},
 
       orderBy: { createdAt: 'desc' }
@@ -89,7 +89,7 @@ export class ReservationsService {
 
 async findOne(id: number) {
   const reservation = await this.prisma.reservation.findUnique({
-    where: { id },
+    where: { id: id },
          include:{event:true,user:true,ticket:true},
 
   });
@@ -107,7 +107,7 @@ async findOne(id: number) {
     throw new ForbiddenException('Only admin can update status');
   }
     const reservation = await this.prisma.reservation.findUnique({
-      where: { id },
+      where: { id: id },
            include:{event:true,user:true,ticket:true},
 
     });
@@ -169,7 +169,7 @@ async findOne(id: number) {
 
   // Update the reservation status
   const updatedReservation = await this.prisma.reservation.update({
-    where: { id },
+    where: { id: id },
     data: { status:data.status },
   });
 
@@ -178,7 +178,7 @@ async findOne(id: number) {
 
   async annule(id: number,user: User) {
     const reservation=await this.prisma.reservation.findUnique({
-      where:{id}
+      where:{id:id}
     });
     
     if(!reservation){
@@ -194,7 +194,7 @@ async findOne(id: number) {
       throw new BadRequestException('Cannot cancel a confirmed reservation');
     }
     const resrvationDeleted=await this.prisma.reservation.update({
-      where:{id},
+      where:{id:id},
       data:{status:"CANCELED"}
     })
 
