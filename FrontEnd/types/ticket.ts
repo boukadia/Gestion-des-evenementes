@@ -13,8 +13,11 @@ export interface Ticket {
   event?: {
     id: number;
     title: string;
+    description?: string;
     dateTime: string;
     location: string;
+    capacity?: number;
+    status?: 'DRAFT' | 'PUBLISHED' | 'CANCELLED';
   };
   reservation?: {
     id: number;

@@ -18,7 +18,7 @@ export default function EventDetails({
         <h1 className="mb-0 h3">{event.title}</h1>
         <span className={`badge mt-2 ${
           event.status === 'PUBLISHED' ? 'bg-success' : 
-          event.status === 'CANCELED' ? 'bg-danger' : 'bg-warning'
+          event.status === 'DRAFT' ? 'bg-danger' : 'bg-warning'
         }`}>
           {event.status}
         </span>

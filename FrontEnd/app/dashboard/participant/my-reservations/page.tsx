@@ -1,23 +1,33 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import ProtectedRoute from '@/components/ProtectedRoute';
-import ParticipantLayout from '@/components/ParticipantLayout';
-import { Reservation } from '@/types/reservation';
-import { getMyReservations, cancelMyReservation } from '@/services/reservations/reservations.api';
-import Toast, { ToastType } from '@/components/Toast';
-import ConfirmDialog from '@/components/ConfirmDialog';
-import styles from './page.module.css';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import ParticipantLayout from "@/components/ParticipantLayout";
+import { Reservation } from "@/types/reservation";
+import {
+  getMyReservations,
+  cancelMyReservation,
+} from "@/services/reservations/reservations.api";
+import Toast, { ToastType } from "@/components/Toast";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import styles from "./page.module.css";
 
 export default function MyReservationsPage() {
   const router = useRouter();
   const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [filteredReservations, setFilteredReservations] = useState<Reservation[]>([]);
+  const [filteredReservations, setFilteredReservations] = useState<
+    Reservation[]
+  >([]);
   const [loading, setLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState<string>('ALL');
-  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
-  const [confirmDialog, setConfirmDialog] = useState<{ reservationId: number } | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [toast, setToast] = useState<{
+    message: string;
+    type: ToastType;
+  } | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    reservationId: number;
+  } | null>(null);
 
   const fetchReservations = async () => {
     try {
@@ -25,7 +35,7 @@ export default function MyReservationsPage() {
       setReservations(data);
       setFilteredReservations(data);
     } catch (error) {
-      console.error('Error fetching reservations:', error);
+      console.error("Error fetching reservations:", error);
     } finally {
       setLoading(false);
     }
@@ -34,8 +44,8 @@ export default function MyReservationsPage() {
   const filterReservations = () => {
     let filtered = reservations;
 
-    if (statusFilter !== 'ALL') {
-      filtered = filtered.filter(res => res.status === statusFilter);
+    if (statusFilter !== "ALL") {
+      filtered = filtered.filter((res) => res.status === statusFilter);
     }
 
     setFilteredReservations(filtered);
@@ -51,33 +61,48 @@ export default function MyReservationsPage() {
 
   const handleCancelConfirm = async () => {
     if (!confirmDialog) return;
-    
+
     const result = await cancelMyReservation(confirmDialog.reservationId);
     setConfirmDialog(null);
 
     if (result.success) {
-      setToast({ message: 'Reservation cancelled successfully!', type: 'success' });
+      setToast({
+        message: "Reservation cancelled successfully!",
+        type: "success",
+      });
       // Update local state
-      setReservations(reservations.map(res =>
-        res.id === confirmDialog.reservationId ? { ...res, status: 'CANCELED' as const } : res
-      ));
+      setReservations(
+        reservations.map((res) =>
+          res.id === confirmDialog.reservationId
+            ? { ...res, status: "CANCELED" as const }
+            : res,
+        ),
+      );
     } else {
-      setToast({ message: result.error || 'Failed to cancel reservation', type: 'error' });
+      setToast({
+        message: result.error || "Failed to cancel reservation",
+        type: "error",
+      });
     }
   };
 
   const getStatusBadgeClass = (status: string) => {
     switch (status) {
-      case 'CONFIRMED': return styles.statusConfirmed;
-      case 'PENDING': return styles.statusPending;
-      case 'REFUSED': return styles.statusRefused;
-      case 'CANCELED': return styles.statusCanceled;
-      default: return '';
+      case "CONFIRMED":
+        return styles.statusConfirmed;
+      case "PENDING":
+        return styles.statusPending;
+      case "REFUSED":
+        return styles.statusRefused;
+      case "CANCELED":
+        return styles.statusCanceled;
+      default:
+        return "";
     }
   };
 
   const getStatusIcon = (status: string) => {
-    return '';
+    return "";
   };
 
   useEffect(() => {
@@ -86,11 +111,11 @@ export default function MyReservationsPage() {
 
   useEffect(() => {
     filterReservations();
-  }, [statusFilter, reservations]);
+  }, [statusFilter, reservations,filterReservations])
 
   if (loading) {
     return (
-      <ProtectedRoute allowedRoles={['PARTICIPANT']}>
+      <ProtectedRoute allowedRoles={["PARTICIPANT"]}>
         <ParticipantLayout>
           <div className={styles.loading}>Loading reservations...</div>
         </ParticipantLayout>
@@ -99,12 +124,14 @@ export default function MyReservationsPage() {
   }
 
   return (
-    <ProtectedRoute allowedRoles={['PARTICIPANT']}>
+    <ProtectedRoute allowedRoles={["PARTICIPANT"]}>
       <ParticipantLayout>
         <div className={styles.pageContainer}>
           <div className={styles.header}>
             <h1 className={styles.pageTitle}>My Reservations</h1>
-            <p className={styles.pageSubtitle}>Manage your event reservations</p>
+            <p className={styles.pageSubtitle}>
+              Manage your event reservations
+            </p>
           </div>
 
           {/* Stats */}
@@ -117,13 +144,17 @@ export default function MyReservationsPage() {
             </div>
             <div className={styles.statCard}>
               <div className={styles.statInfo}>
-                <span className={styles.statNumber}>{reservations.filter(r => r.status === 'CONFIRMED').length}</span>
+                <span className={styles.statNumber}>
+                  {reservations.filter((r) => r.status === "CONFIRMED").length}
+                </span>
                 <span className={styles.statLabel}>Confirmed</span>
               </div>
             </div>
             <div className={styles.statCard}>
               <div className={styles.statInfo}>
-                <span className={styles.statNumber}>{reservations.filter(r => r.status === 'PENDING').length}</span>
+                <span className={styles.statNumber}>
+                  {reservations.filter((r) => r.status === "PENDING").length}
+                </span>
                 <span className={styles.statLabel}>Pending</span>
               </div>
             </div>
@@ -148,48 +179,65 @@ export default function MyReservationsPage() {
           {filteredReservations.length === 0 ? (
             <div className={styles.noReservations}>
               <h3>No reservations found</h3>
-              <p>You haven't made any reservations yet. Browse events to get started!</p>
+              <p>
+                You haven't made any reservations yet. Browse events to get
+                started!
+              </p>
             </div>
           ) : (
             <div className={styles.reservationsGrid}>
               {filteredReservations.map((reservation) => (
                 <div key={reservation.id} className={styles.reservationCard}>
                   <div className={styles.cardHeader}>
-                    <h3 className={styles.eventTitle}>{reservation.event.title}</h3>
-                    <span className={`${styles.statusBadge} ${getStatusBadgeClass(reservation.status)}`}>
+                    <h3 className={styles.eventTitle}>
+                      {reservation.event.title}
+                    </h3>
+                    <span
+                      className={`${styles.statusBadge} ${getStatusBadgeClass(reservation.status)}`}
+                    >
                       {getStatusIcon(reservation.status)} {reservation.status}
                     </span>
                   </div>
 
                   <div className={styles.eventDetails}>
                     <div className={styles.detailItem}>
-                      <span>{new Date(reservation.event.dateTime).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}</span>
+                      <span>
+                        {new Date(
+                          reservation.event.dateTime,
+                        ).toLocaleDateString("en-US", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
                     </div>
                     <div className={styles.detailItem}>
                       <span>{reservation.event.location}</span>
                     </div>
                     <div className={styles.detailItem}>
-                      <span>Reserved on: {new Date(reservation.createdAt).toLocaleDateString()}</span>
+                      <span>
+                        Reserved on:{" "}
+                        {new Date(reservation.createdAt).toLocaleDateString()}
+                      </span>
                     </div>
                   </div>
 
                   <div className={styles.cardActions}>
-                    {reservation.status === 'CONFIRMED' && reservation.ticket && (
-                      <button 
-                        onClick={() => handleViewTicket(reservation.ticket.id)}
-                        className={styles.ticketButton}
-                      >
-                        View Ticket
-                      </button>
-                    )}
-                    {(reservation.status === 'PENDING' ) && (
+                    {reservation.status === "CONFIRMED" &&
+                      reservation.ticket && (
+                        <button
+                          onClick={() =>
+                            handleViewTicket(reservation.ticket!.id)
+                          }
+                          className={styles.ticketButton}
+                        >
+                          View Ticket
+                        </button>
+                      )}
+                    {reservation.status === "PENDING" && (
                       <button
                         onClick={() => handleCancelClick(reservation.id)}
                         className={styles.cancelButton}
@@ -197,11 +245,15 @@ export default function MyReservationsPage() {
                         Cancel Reservation
                       </button>
                     )}
-                    {reservation.status === 'REFUSED' && (
-                      <span className={styles.refusedMessage}>This reservation was refused by the admin</span>
+                    {reservation.status === "REFUSED" && (
+                      <span className={styles.refusedMessage}>
+                        This reservation was refused by the admin
+                      </span>
                     )}
-                    {reservation.status === 'CANCELED' && (
-                      <span className={styles.canceledMessage}>You canceled this reservation</span>
+                    {reservation.status === "CANCELED" && (
+                      <span className={styles.canceledMessage}>
+                        You canceled this reservation
+                      </span>
                     )}
                   </div>
                 </div>
@@ -221,7 +273,13 @@ export default function MyReservationsPage() {
           onCancel={() => setConfirmDialog(null)}
         />
       )}
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </ProtectedRoute>
   );
 }
