@@ -6,6 +6,7 @@ import ParticipantLayout from '@/components/ParticipantLayout';
 import { Reservation } from '@/types/reservation';
 import { getMyReservations, cancelMyReservation } from '@/services/reservations/reservations.api';
 import Toast, { ToastType } from '@/components/Toast';
+import ConfirmDialog from '@/components/ConfirmDialog';
 import styles from './page.module.css';
 
 export default function MyReservationsPage() {
@@ -14,6 +15,7 @@ export default function MyReservationsPage() {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{ reservationId: number } | null>(null);
 
   const fetchReservations = async () => {
     try {
@@ -37,18 +39,21 @@ export default function MyReservationsPage() {
     setFilteredReservations(filtered);
   };
 
-  const handleCancel = async (reservationId: number) => {
-    if (!confirm('Are you sure you want to cancel this reservation?')) {
-      return;
-    }
+  const handleCancelClick = (reservationId: number) => {
+    setConfirmDialog({ reservationId });
+  };
 
-    const result = await cancelMyReservation(reservationId);
+  const handleCancelConfirm = async () => {
+    if (!confirmDialog) return;
+    
+    const result = await cancelMyReservation(confirmDialog.reservationId);
+    setConfirmDialog(null);
 
     if (result.success) {
       setToast({ message: 'Reservation cancelled successfully! ✅', type: 'success' });
       // Update local state
       setReservations(reservations.map(res =>
-        res.id === reservationId ? { ...res, status: 'CANCELED' as const } : res
+        res.id === confirmDialog.reservationId ? { ...res, status: 'CANCELED' as const } : res
       ));
     } else {
       setToast({ message: result.error || 'Failed to cancel reservation', type: 'error' });
@@ -190,7 +195,7 @@ export default function MyReservationsPage() {
                     )}
                     {(reservation.status === 'PENDING' || reservation.status === 'CONFIRMED') && (
                       <button
-                        onClick={() => handleCancel(reservation.id)}
+                        onClick={() => handleCancelClick(reservation.id)}
                         className={styles.cancelButton}
                       >
                         Cancel Reservation
@@ -209,6 +214,17 @@ export default function MyReservationsPage() {
           )}
         </div>
       </ParticipantLayout>
+      {confirmDialog && (
+        <ConfirmDialog
+          title="Cancel Reservation"
+          message="Are you sure you want to cancel this reservation? You may not be able to book it again if the event is full."
+          confirmText="Yes, Cancel"
+          cancelText="Keep It"
+          type="warning"
+          onConfirm={handleCancelConfirm}
+          onCancel={() => setConfirmDialog(null)}
+        />
+      )}
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </ProtectedRoute>
   );
