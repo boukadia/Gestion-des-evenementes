@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsOptional } from 'class-validator';
+import { IsEnum } from 'class-validator';
 import { ReservationStatus } from 'generated/prisma/enums';
 
 export class UpdateReservationStatusDto {

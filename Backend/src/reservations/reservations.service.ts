@@ -7,7 +7,6 @@ import {
 import { CreateReservationDto } from './dto/create-reservation.dto';
 // import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { PrismaService } from 'src/prisma.service';
-import { UpdateEvenementeDto } from 'src/evenementes/dto/update-evenemente.dto';
 import { UpdateReservationStatusDto } from './dto/update-reservation.dto';
 import { User } from 'generated/prisma/browser';
 

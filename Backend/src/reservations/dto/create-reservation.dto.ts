@@ -1,5 +1,4 @@
-import { IsEnum, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
-import { ReservationStatus } from 'generated/prisma/enums';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class CreateReservationDto {
   //   @IsNotEmpty()
