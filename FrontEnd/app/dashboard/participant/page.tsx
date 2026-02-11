@@ -11,9 +11,9 @@ import styles from './page.module.css';
 export default function ParticipantDashboard() {
   const { user } = useAuth();
   const [stats, setStats] = useState({
-    eventsAttended: 0,
     activeReservations: 0,
-    totalReservations: 0
+    totalReservations: 0,
+    totalTickets: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -23,13 +23,11 @@ export default function ParticipantDashboard() {
       const reservations = await getMyReservations();
       
       setStats({
-        eventsAttended: reservations.filter((r) => 
-          r.status === 'CONFIRMED' && new Date(r.event.dateTime) < new Date()
-        ).length,
         activeReservations: reservations.filter((r) => 
           r.status === 'CONFIRMED' && new Date(r.event.dateTime) > new Date()
         ).length,
-        totalReservations: reservations.length
+        totalReservations: reservations.length,
+        totalTickets: reservations.filter((r) => r.ticket).length
       });
     } catch (error) {
       console.error('Error fetching stats:', error);
@@ -78,12 +76,7 @@ export default function ParticipantDashboard() {
           <div className={styles.statsSection}>
             <h2 className={styles.sectionTitle}>Your Activity</h2>
             <div className={styles.statsGrid}>
-              <div className={styles.statCard}>
-                <div className={styles.statInfo}>
-                  <div className={styles.statNumber}>{loading ? '...' : stats.eventsAttended}</div>
-                  <div className={styles.statLabel}>Events Attended</div>
-                </div>
-              </div>
+              
 
               <div className={styles.statCard}>
                 <div className={styles.statInfo}>
@@ -96,6 +89,13 @@ export default function ParticipantDashboard() {
                 <div className={styles.statInfo}>
                   <div className={styles.statNumber}>{loading ? '...' : stats.totalReservations}</div>
                   <div className={styles.statLabel}>Total Reservations</div>
+                </div>
+              </div>
+
+              <div className={styles.statCard}>
+                <div className={styles.statInfo}>
+                  <div className={styles.statNumber}>{loading ? '...' : stats.totalTickets}</div>
+                  <div className={styles.statLabel}>Total Tickets</div>
                 </div>
               </div>
             </div>

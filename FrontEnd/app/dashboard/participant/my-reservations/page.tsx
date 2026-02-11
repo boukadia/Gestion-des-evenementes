@@ -111,7 +111,8 @@ export default function MyReservationsPage() {
 
   useEffect(() => {
     filterReservations();
-  }, [statusFilter, reservations,filterReservations])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusFilter, reservations])
 
   if (loading) {
     return (
