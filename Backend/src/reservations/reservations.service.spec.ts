@@ -12,7 +12,6 @@ import { Role } from 'generated/prisma/client';
 
 describe('ReservationsService', () => {
   let service: ReservationsService;
-  let prismaService: PrismaService;
 
   const mockPrismaService = {
     event: {
@@ -83,7 +82,6 @@ describe('ReservationsService', () => {
     }).compile();
 
     service = module.get<ReservationsService>(ReservationsService);
-    prismaService = module.get<PrismaService>(PrismaService);
 
     jest.resetAllMocks();
   });
@@ -104,10 +102,10 @@ describe('ReservationsService', () => {
 
       const result = await service.create(createDto, mockParticipantUser);
 
-      expect(prismaService.event.findUnique).toHaveBeenCalledWith({
+      expect(mockPrismaService.event.findUnique).toHaveBeenCalledWith({
         where: { id: 1 },
       });
-      expect(prismaService.reservation.count).toHaveBeenCalledWith({
+      expect(mockPrismaService.reservation.count).toHaveBeenCalledWith({
         where: { eventId: 1, status: 'CONFIRMED' },
       });
       expect(result).toEqual(mockReservation);
@@ -195,7 +193,7 @@ describe('ReservationsService', () => {
 
       const result = await service.findAll(mockAdminUser);
 
-      expect(prismaService.reservation.findMany).toHaveBeenCalledWith({
+      expect(mockPrismaService.reservation.findMany).toHaveBeenCalledWith({
         include: { event: true, user: true, ticket: true },
         orderBy: { createdAt: 'desc' },
       });
@@ -223,7 +221,7 @@ describe('ReservationsService', () => {
 
       const result = await service.findMyReservations(2);
 
-      expect(prismaService.reservation.findMany).toHaveBeenCalledWith({
+      expect(mockPrismaService.reservation.findMany).toHaveBeenCalledWith({
         where: { userId: 2 },
         include: { event: true, user: true, ticket: true },
         orderBy: { createdAt: 'desc' },
@@ -245,7 +243,7 @@ describe('ReservationsService', () => {
 
       const result = await service.findOne(1);
 
-      expect(prismaService.reservation.findUnique).toHaveBeenCalledWith({
+      expect(mockPrismaService.reservation.findUnique).toHaveBeenCalledWith({
         where: { id: 1 },
         include: { event: true, user: true, ticket: true },
       });
@@ -287,8 +285,8 @@ describe('ReservationsService', () => {
 
       const result = await service.update(1, updateDto, mockAdminUser);
 
-      expect(prismaService.ticket.create).toHaveBeenCalled();
-      expect(prismaService.reservation.update).toHaveBeenCalledWith({
+      expect(mockPrismaService.ticket.create).toHaveBeenCalled();
+      expect(mockPrismaService.reservation.update).toHaveBeenCalledWith({
         where: { id: 1 },
         data: { status: 'CONFIRMED' },
       });
@@ -386,7 +384,7 @@ describe('ReservationsService', () => {
 
       const result = await service.annule(1, mockParticipantUser);
 
-      expect(prismaService.reservation.update).toHaveBeenCalledWith({
+      expect(mockPrismaService.reservation.update).toHaveBeenCalledWith({
         where: { id: 1 },
         data: { status: 'CANCELED' },
       });

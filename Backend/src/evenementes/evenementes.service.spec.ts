@@ -8,7 +8,6 @@ import { Role } from 'generated/prisma/client';
 
 describe('EvenementesService', () => {
   let service: EvenementesService;
-  let prismaService: PrismaService;
 
   const mockPrismaService = {
     event: {
@@ -54,7 +53,6 @@ describe('EvenementesService', () => {
     }).compile();
 
     service = module.get<EvenementesService>(EvenementesService);
-    prismaService = module.get<PrismaService>(PrismaService);
 
     jest.clearAllMocks();
   });
@@ -77,7 +75,7 @@ describe('EvenementesService', () => {
 
       const result = await service.create(createDto, mockUser);
 
-      expect(prismaService.event.create).toHaveBeenCalledWith({
+      expect(mockPrismaService.event.create).toHaveBeenCalledWith({
         data: {
           title: createDto.title,
           description: createDto.description,
@@ -117,7 +115,7 @@ describe('EvenementesService', () => {
 
       const result = await service.findAll();
 
-      expect(prismaService.event.findMany).toHaveBeenCalledWith();
+      expect(mockPrismaService.event.findMany).toHaveBeenCalledWith();
       expect(result).toEqual(mockEvents);
       expect(result).toHaveLength(2);
     });
@@ -141,7 +139,7 @@ describe('EvenementesService', () => {
 
       const result = await service.findPublished();
 
-      expect(prismaService.event.findMany).toHaveBeenCalledWith({
+      expect(mockPrismaService.event.findMany).toHaveBeenCalledWith({
         where: { status: 'PUBLISHED' },
         orderBy: { dateTime: 'asc' },
       });
@@ -167,7 +165,7 @@ describe('EvenementesService', () => {
 
       const result = await service.changeStatus(1, changeStatusDto);
 
-      expect(prismaService.event.update).toHaveBeenCalledWith({
+      expect(mockPrismaService.event.update).toHaveBeenCalledWith({
         where: { id: 1 },
         data: { status: 'PUBLISHED' },
       });
@@ -193,7 +191,7 @@ describe('EvenementesService', () => {
 
       const result = await service.findOne(1);
 
-      expect(prismaService.event.findUnique).toHaveBeenCalledWith({
+      expect(mockPrismaService.event.findUnique).toHaveBeenCalledWith({
         where: { id: 1 },
       });
       expect(result).toEqual(mockEvent);
@@ -209,7 +207,7 @@ describe('EvenementesService', () => {
 
     it('should throw error for invalid id', async () => {
       await expect(service.findOne(NaN)).rejects.toThrow('Invalid event ID');
-      await expect(service.findOne(null as any)).rejects.toThrow(
+      await expect(service.findOne(null as number)).rejects.toThrow(
         'Invalid event ID',
       );
     });
@@ -227,7 +225,7 @@ describe('EvenementesService', () => {
 
       const result = await service.update(1, updateDto);
 
-      expect(prismaService.event.update).toHaveBeenCalledWith({
+      expect(mockPrismaService.event.update).toHaveBeenCalledWith({
         where: { id: 1 },
         data: updateDto,
       });
@@ -254,7 +252,7 @@ describe('EvenementesService', () => {
 
       const result = await service.remove(1);
 
-      expect(prismaService.event.delete).toHaveBeenCalledWith({
+      expect(mockPrismaService.event.delete).toHaveBeenCalledWith({
         where: { id: 1 },
       });
       expect(result).toBeDefined();
