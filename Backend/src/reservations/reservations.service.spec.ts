@@ -170,7 +170,8 @@ describe('ReservationsService', () => {
       mockPrismaService.reservation.count.mockResolvedValue(50);
       mockPrismaService.reservation.findFirst
         .mockResolvedValueOnce(null) // First call: no active reservation
-        .mockResolvedValueOnce({ // Second call: has canceled reservation
+        .mockResolvedValueOnce({
+          // Second call: has canceled reservation
           ...mockReservation,
           status: 'CANCELED',
         });
@@ -306,12 +307,12 @@ describe('ReservationsService', () => {
     it('should throw NotFoundException if reservation not found', async () => {
       mockPrismaService.reservation.findUnique.mockResolvedValue(null);
 
-      await expect(service.update(999, updateDto, mockAdminUser)).rejects.toThrow(
-        NotFoundException,
-      );
-      await expect(service.update(999, updateDto, mockAdminUser)).rejects.toThrow(
-        'Reservation not found',
-      );
+      await expect(
+        service.update(999, updateDto, mockAdminUser),
+      ).rejects.toThrow(NotFoundException);
+      await expect(
+        service.update(999, updateDto, mockAdminUser),
+      ).rejects.toThrow('Reservation not found');
     });
 
     it('should throw BadRequestException if status already same', async () => {
@@ -320,12 +321,12 @@ describe('ReservationsService', () => {
         status: 'CONFIRMED',
       });
 
-      await expect(
-        service.update(1, updateDto, mockAdminUser),
-      ).rejects.toThrow(BadRequestException);
-      await expect(
-        service.update(1, updateDto, mockAdminUser),
-      ).rejects.toThrow('Reservation is already CONFIRMED');
+      await expect(service.update(1, updateDto, mockAdminUser)).rejects.toThrow(
+        BadRequestException,
+      );
+      await expect(service.update(1, updateDto, mockAdminUser)).rejects.toThrow(
+        'Reservation is already CONFIRMED',
+      );
     });
 
     it('should throw BadRequestException if confirming canceled reservation', async () => {
@@ -334,12 +335,12 @@ describe('ReservationsService', () => {
         status: 'CANCELED',
       });
 
-      await expect(
-        service.update(1, updateDto, mockAdminUser),
-      ).rejects.toThrow(BadRequestException);
-      await expect(
-        service.update(1, updateDto, mockAdminUser),
-      ).rejects.toThrow('Cannot confirm a canceled reservation');
+      await expect(service.update(1, updateDto, mockAdminUser)).rejects.toThrow(
+        BadRequestException,
+      );
+      await expect(service.update(1, updateDto, mockAdminUser)).rejects.toThrow(
+        'Cannot confirm a canceled reservation',
+      );
     });
 
     it('should throw BadRequestException if canceling confirmed reservation', async () => {
@@ -364,12 +365,12 @@ describe('ReservationsService', () => {
       mockPrismaService.reservation.count.mockResolvedValue(100);
       mockPrismaService.event.findUnique.mockResolvedValue(mockEvent);
 
-      await expect(
-        service.update(1, updateDto, mockAdminUser),
-      ).rejects.toThrow(BadRequestException);
-      await expect(
-        service.update(1, updateDto, mockAdminUser),
-      ).rejects.toThrow('Event is full');
+      await expect(service.update(1, updateDto, mockAdminUser)).rejects.toThrow(
+        BadRequestException,
+      );
+      await expect(service.update(1, updateDto, mockAdminUser)).rejects.toThrow(
+        'Event is full',
+      );
     });
   });
 

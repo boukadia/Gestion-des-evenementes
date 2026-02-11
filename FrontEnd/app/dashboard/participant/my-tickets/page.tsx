@@ -98,14 +98,10 @@ export default function MyTicketsPage() {
                 <div key={ticket.id} className={styles.ticketCard}>
                   <div className={styles.ticketHeader}>
                     <div className={styles.ticketNumber}>
-                      <span className={styles.ticketLabel}>Ticket #</span>
+                      <span className={styles.ticketLabel}>Ticket </span>
                       <span className={styles.ticketId}>{ticket.id}</span>
                     </div>
-                    <span className={`${styles.statusBadge} ${
-                      ticket.reservation?.status === 'CONFIRMED' ? styles.statusConfirmed : styles.statusPending
-                    }`}>
-                      {ticket.reservation?.status === 'CONFIRMED' ? 'Confirmed' : 'Pending'}
-                    </span>
+                    
                   </div>
 
                   <div className={styles.eventInfo}>
